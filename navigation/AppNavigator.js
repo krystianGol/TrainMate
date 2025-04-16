@@ -6,7 +6,7 @@ import AuthScreen from "../screens/AuthScreen";
 
 const AppNavigator = () => {
 
-  const isAuth = true;
+  const isAuth = false;
 
   return (
     <NavigationContainer>

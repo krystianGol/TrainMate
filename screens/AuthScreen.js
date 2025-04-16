@@ -6,11 +6,9 @@ import SignUp from "../components/SignUp"
 
 const AuthScreen = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   return (
     <View>
-      {isLoggedIn && S}
+      <SignUp />
     </View>
   )
 }
