@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity, Text } from "react-native";
 import React, { useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -15,7 +15,7 @@ const SignUp = () => {
   const [weight, setWeight] = useState(30);
 
   return (
-    <ScrollView>
+    <>
       <Input
         iconPack={FontAwesome}
         iconName="user-o"
@@ -78,7 +78,7 @@ const SignUp = () => {
       <LabeledSlider
         label="Staż bokserski (lata)"
         min={0}
-        max={50}
+        max={30}
         value={experience}
         onChange={setExperience}
       />
@@ -100,8 +100,9 @@ const SignUp = () => {
       />
 
       <SubmitButton title="Sign Up" onPress={() => console.log("pressed")} />
-    </ScrollView>
+    </>
   );
 };
+
 
 export default SignUp;

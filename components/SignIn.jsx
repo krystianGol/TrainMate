@@ -9,7 +9,7 @@ import SubmitButton from "./SubmitButton";
 
 const SignIn = () => {
   return (
-    <View>
+    <>
       <Input
         iconPack={Fontisto}
         iconName="email"
@@ -35,7 +35,7 @@ const SignIn = () => {
         title="Sign In"
         onPress={() => console.log('Pressed')}
       />
-    </View>
+    </>
   );
 };
 

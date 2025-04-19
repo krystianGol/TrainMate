@@ -28,14 +28,12 @@ const Input = (props) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginHorizontal: 10
   },
   inputContainer: {
     flexDirection: "row",
     widht: "100%",
     paddingHorizontal: 10,
     paddingVertical: 15,
-    marginRight: 20,
     borderRadius: 2,
     backgroundColor: colors.nearlyWhite,
     alignItems: "center",
