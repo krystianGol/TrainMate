@@ -7,7 +7,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { use, useState } from "react";
+import React, { useReucer, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import SignIn from "../components/SignIn";
@@ -34,7 +34,7 @@ const AuthScreen = () => {
               onPress={() => setSignUpForm((prevValue) => !prevValue)}
             >
               <Text style={styles.link}>{`Switch to ${
-                singUpForm ? "SignIn" : "SignUp"
+                singUpForm ? "Sign In" : "Sign Up"
               }`}</Text>
             </TouchableOpacity>
           </ScrollView>

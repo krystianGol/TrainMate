@@ -1,9 +1,14 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import colors from "../constans/colors";
 
 const Input = (props) => {
+
+  const onChangeText = text => {
+    props.onInputChanged(props.id, text);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{props.label}</Text>
@@ -14,13 +19,19 @@ const Input = (props) => {
           size={props.size || 20}
           color={props.color}
         />
-        <TextInput 
-         { ...props }
-         style={styles.textBox} 
-         placeholder={props.placeholder} 
-         keyboardType={props.keyboardType || 'default'}
-         />
+        <TextInput
+          {...props}
+          style={styles.textBox}
+          placeholder={props.placeholder}
+          keyboardType={props.keyboardType || "default"}
+          onChangeText={onChangeText}
+        />
       </View>
+      {props.errorText && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{props.errorText}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -54,6 +65,15 @@ const styles = StyleSheet.create({
     fontFamily: "bold",
     letterSpacing: 0.3,
     color: colors.textColor,
+  },
+  errorContainer: {
+    marginVertical: 5,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 13,
+    fontFamily: "regular",
+    letterSpacing: 0.3,
   },
 });
 

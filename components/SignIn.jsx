@@ -6,11 +6,18 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
+import { validateInput } from "../utils/actions/formActions";
 
 const SignIn = () => {
+
+  const inputChanedHandler = (inputId, inputValue) => {
+      console.log(validateInput(inputId, inputValue));
+    };
+
   return (
     <>
       <Input
+        id="email"
         iconPack={Fontisto}
         iconName="email"
         size={24}
@@ -18,9 +25,11 @@ const SignIn = () => {
         placeholder="Enter your email"
         label="Email"
         keyboardType="email-address"
+        onInputChanged={inputChanedHandler}
       />
 
       <Input
+        id="password"
         iconPack={AntDesign}
         iconName="lock"
         size={24}
@@ -29,6 +38,7 @@ const SignIn = () => {
         label="Password"
         secureTextEntry={true}
         autoCapitalize="none"
+        onInputChanged={inputChanedHandler}
       />
 
       <SubmitButton 
