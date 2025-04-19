@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 import Input from "./Input";
 import LabeledSlider from "./LabeledSlider";
+import SubmitButton from "./SubmitButton";
 
 const SignUp = () => {
   const [experience, setExperience] = useState(3);
@@ -53,6 +55,26 @@ const SignUp = () => {
         autoCapitalize="none"
       />
 
+      <Input
+        iconPack={FontAwesome}
+        iconName="home"
+        size={24}
+        color="black"
+        placeholder="Enter the name of your boxing club"
+        label="Boxing Club"
+        autoCapitalize="none"
+      />
+
+      <Input
+        iconPack={EvilIcons}
+        iconName="location"
+        size={24}
+        color="black"
+        placeholder="Enter your city"
+        label="City"
+        autoCapitalize="none"
+      />
+
       <LabeledSlider
         label="Staż bokserski (lata)"
         min={0}
@@ -76,6 +98,8 @@ const SignUp = () => {
         value={weight}
         onChange={setWeight}
       />
+
+      <SubmitButton title="Sign Up" onPress={() => console.log("pressed")} />
     </ScrollView>
   );
 };
