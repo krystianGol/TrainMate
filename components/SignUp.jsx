@@ -10,8 +10,20 @@ import LabeledSlider from "./LabeledSlider";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { reducer } from "../utils/reducers/formReducer";
+import { signUp } from "../utils/actions/authActions";
 
 const initialState = {
+  inputValues: {
+    firstName: "",
+    lastName: "",
+    clubName: "",
+    city: "",
+    email: "",
+    password: "",
+    experience: 0,
+    fights: 0,
+    weight: 0,
+  },
   inputValidities: {
     firstName: false,
     lastName: false,
@@ -20,20 +32,43 @@ const initialState = {
     email: false,
     password: false,
   },
-  formIsValid: false
-}
+  formIsValid: false,
+};
+
 
 const SignUp = () => {
-  const [experience, setExperience] = useState(3);
-  const [fights, setFights] = useState(0);
-  const [weight, setWeight] = useState(30);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const inputChangedHandler = useCallback((inputId, inputValue) => {
-        const result = validateInput(inputId, inputValue);
-        dispatch({ inputId, validationResult: result })
-    }, [dispatch]);
+  const inputChangedHandler = useCallback(
+    (inputId, inputValue) => {
+      const result = validateInput(inputId, inputValue);
+      dispatch({ inputValue, inputId, validationResult: result });
+    },
+    [dispatch]
+  );
+
+  const onSliderChange = (id, value) => {
+    dispatch({
+      inputId: id,
+      inputValue: value,
+      validationResult: undefined,
+    });
+  };
+
+  const authHandler = () => {
+    signUp(
+      state.inputValues.firstName,
+      state.inputValues.lastName,
+      state.inputValues.clubName,
+      state.inputValues.city,
+      state.inputValues.email,
+      state.inputValues.password,
+      state.inputValues.experience,
+      state.inputValues.fights,
+      state.inputValues.weight
+    );
+  };
 
   return (
     <>
@@ -46,7 +81,8 @@ const SignUp = () => {
         placeholder="Enter your first name"
         label="First Name"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['firstName']}
+        errorText={state.inputValidities["firstName"]}
+        value={state.inputValues["firstName"]}
       />
 
       <Input
@@ -58,7 +94,8 @@ const SignUp = () => {
         placeholder="Enter your last name"
         label="Second Name"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['lastName']}
+        errorText={state.inputValidities["lastName"]}
+        value={state.inputValues["lastName"]}
       />
 
       <Input
@@ -71,7 +108,8 @@ const SignUp = () => {
         label="Boxing Club"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['clubName']}
+        errorText={state.inputValidities["clubName"]}
+        value={state.inputValues["clubName"]}
       />
 
       <Input
@@ -84,7 +122,8 @@ const SignUp = () => {
         label="City"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['city']}
+        errorText={state.inputValidities["city"]}
+        value={state.inputValues["city"]}
       />
 
       <Input
@@ -97,7 +136,8 @@ const SignUp = () => {
         label="Email"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['email']}
+        errorText={state.inputValidities["email"]}
+        value={state.inputValues["email"]}
       />
 
       <Input
@@ -111,7 +151,8 @@ const SignUp = () => {
         secureTextEntry={true}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities['password']}
+        errorText={state.inputValidities["password"]}
+        value={state.inputValues["password"]}
       />
 
       <LabeledSlider
@@ -119,8 +160,8 @@ const SignUp = () => {
         label="Boxing internship (years)"
         min={0}
         max={30}
-        value={experience}
-        onChange={setExperience}
+        value={state.inputValues.experience}
+        onChange={(value) => onSliderChange("experience", value)}
       />
 
       <LabeledSlider
@@ -128,8 +169,8 @@ const SignUp = () => {
         label="Number of fights"
         min={0}
         max={50}
-        value={fights}
-        onChange={setFights}
+        value={state.inputValues.fights}
+        onChange={(value) => onSliderChange("fights", value)}
       />
 
       <LabeledSlider
@@ -137,15 +178,15 @@ const SignUp = () => {
         label="Weight (kg)"
         min={30}
         max={120}
-        value={weight}
-        onChange={setWeight}
+        value={state.inputValues.weight}
+        onChange={(value) => onSliderChange("weight", value)}
       />
 
-      <SubmitButton 
-        title="Sign Up" 
-        onPress={() => console.log("pressed")} 
+      <SubmitButton
+        title="Sign Up"
+        onPress={authHandler}
         disabled={!state.formIsValid}
-        />
+      />
     </>
   );
 };
