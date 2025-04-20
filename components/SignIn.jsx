@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useCallback, useReducer } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -7,12 +7,24 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
+import { reducer } from "../utils/reducers/formReducer";
+
+const initialState = {
+  inputValidities: {
+    email: false,
+    password: false,
+  },
+  formIsValid: false
+}
 
 const SignIn = () => {
 
-  const inputChanedHandler = (inputId, inputValue) => {
-      console.log(validateInput(inputId, inputValue));
-    };
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const inputChanedHandler = useCallback((inputId, inputValue) => {
+      const result = validateInput(inputId, inputValue);
+      dispatch({ inputId, validationResult: result })
+    }, [dispatch]);
 
   return (
     <>
@@ -26,6 +38,7 @@ const SignIn = () => {
         label="Email"
         keyboardType="email-address"
         onInputChanged={inputChanedHandler}
+        errorText={state.inputValidities['email']}
       />
 
       <Input
@@ -39,11 +52,13 @@ const SignIn = () => {
         secureTextEntry={true}
         autoCapitalize="none"
         onInputChanged={inputChanedHandler}
+        errorText={state.inputValidities['password']}
       />
 
       <SubmitButton 
         title="Sign In"
         onPress={() => console.log('Pressed')}
+        disabled={!state.formIsValid}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import { ScrollView, TouchableOpacity, Text } from "react-native";
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useCallback } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -9,29 +9,7 @@ import Input from "./Input";
 import LabeledSlider from "./LabeledSlider";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
-
-
-const reducer = (state, action) => {
-  const {validationResult, inputId} = action;
-
-  const updatedValidities = {
-    ...state.inputValidities,
-    [inputId]: validationResult,
-  }
-
-  let updatedFormIsValid = true;
-  for (const key in updatedValidities) {
-    if (updatedValidities[key] !== undefined) {
-      updatedFormIsValid = false;
-      break;
-    }
-  }
-
-    return {
-      inputValidities: updatedValidities,
-      formIsValid: updatedFormIsValid
-    };
-}
+import { reducer } from "../utils/reducers/formReducer";
 
 const initialState = {
   inputValidities: {
@@ -52,10 +30,10 @@ const SignUp = () => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const inputChangedHandler = (inputId, inputValue) => {
+  const inputChangedHandler = useCallback((inputId, inputValue) => {
         const result = validateInput(inputId, inputValue);
         dispatch({ inputId, validationResult: result })
-    };
+    }, [dispatch]);
 
   return (
     <>
@@ -68,6 +46,7 @@ const SignUp = () => {
         placeholder="Enter your first name"
         label="First Name"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['firstName']}
       />
 
       <Input
@@ -79,6 +58,7 @@ const SignUp = () => {
         placeholder="Enter your last name"
         label="Second Name"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['lastName']}
       />
 
       <Input
@@ -91,6 +71,7 @@ const SignUp = () => {
         label="Boxing Club"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['clubName']}
       />
 
       <Input
@@ -103,6 +84,7 @@ const SignUp = () => {
         label="City"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['city']}
       />
 
       <Input
@@ -115,6 +97,7 @@ const SignUp = () => {
         label="Email"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['email']}
       />
 
       <Input
@@ -128,6 +111,7 @@ const SignUp = () => {
         secureTextEntry={true}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
+        errorText={state.inputValidities['password']}
       />
 
       <LabeledSlider
