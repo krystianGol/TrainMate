@@ -3,12 +3,21 @@ import React from 'react'
 
 import colors from "../constans/colors"
 
-const SubmitButton = ({ title, onPress}) => {
+const SubmitButton = (props) => {
+
+  const enabledColor = props.color || 'red';
+  const disabledColor = colors.lightGrey;
+  const bgColor = props.disabled ? disabledColor : enabledColor;
+
   return (
     <TouchableOpacity 
-        style={styles.buttonStyle}
-        onPress={onPress}>
-        <Text>{title}</Text>
+        style={{
+          ...styles.buttonStyle,
+          ...props.style,
+          ...{backgroundColor: bgColor}
+        }}
+        onPress={props.disabled ? () => {} : props.onPress}>
+        <Text style={{ color: props.disabled ? colors.grey : "black"}}>{props.title}</Text>
     </TouchableOpacity>
   )
 }

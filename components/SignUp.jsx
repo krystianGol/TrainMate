@@ -10,6 +10,29 @@ import LabeledSlider from "./LabeledSlider";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 
+
+const reducer = (state, action) => {
+  const {validationResult, inputId} = action;
+
+  const updatedValidities = {
+    ...state.inputValidities,
+    [inputId]: validationResult,
+  }
+
+  let updatedFormIsValid = true;
+  for (const key in updatedValidities) {
+    if (updatedValidities[key] !== undefined) {
+      updatedFormIsValid = false;
+      break;
+    }
+  }
+
+    return {
+      inputValidities: updatedValidities,
+      formIsValid: updatedFormIsValid
+    };
+}
+
 const initialState = {
   inputValidities: {
     firstName: false,
@@ -22,12 +45,6 @@ const initialState = {
   formIsValid: false
 }
 
-const reducer = (state, action) => {
-  const validationResult = action.validationResult;
-  console.log(validationResult);
-  return state;
-}
-
 const SignUp = () => {
   const [experience, setExperience] = useState(3);
   const [fights, setFights] = useState(0);
@@ -37,7 +54,7 @@ const SignUp = () => {
 
   const inputChangedHandler = (inputId, inputValue) => {
         const result = validateInput(inputId, inputValue);
-        dispatch({ validationResult: result })
+        dispatch({ inputId, validationResult: result })
     };
 
   return (
@@ -140,7 +157,11 @@ const SignUp = () => {
         onChange={setWeight}
       />
 
-      <SubmitButton title="Sign Up" onPress={() => console.log("pressed")} />
+      <SubmitButton 
+        title="Sign Up" 
+        onPress={() => console.log("pressed")} 
+        disabled={!state.formIsValid}
+        />
     </>
   );
 };
