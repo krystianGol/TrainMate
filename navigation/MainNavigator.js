@@ -16,6 +16,7 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="ChatList"
       screenOptions={{
         headerTitle: "",
         headerShadowVisible: false,
