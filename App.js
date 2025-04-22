@@ -1,18 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState, useCallback } from 'react';
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useState, useCallback } from "react";
+import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { store } from "./store/store";
+import { Provider } from "react-redux";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from "./navigation/AppNavigator";
 
-
+// AsyncStorage.clear();
 SplashScreen.preventAutoHideAsync();
 
-
 export default function App() {
-
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
@@ -51,12 +52,19 @@ export default function App() {
     return null;
   }
 
-
   return (
-    <SafeAreaProvider onLayout={onLayout}>
-      <SafeAreaView style={{ flex: 1}}>
+    <Provider store={store}>
+      <SafeAreaProvider style={styles.container} onLayout={onLayout}>
+        <StatusBar style="dark" />
         <AppNavigator />
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});

@@ -7,7 +7,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useReucer, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import SignIn from "../components/SignIn";

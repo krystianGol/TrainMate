@@ -6,7 +6,7 @@ export const validateString = (id, value) => {
   };
   if (value !== "") {
     constraints.format = {
-      pattern: "[a-z]+",
+      pattern: "^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$",
       flags: "i",
       message: "value can only contain letters",
     };
@@ -14,6 +14,21 @@ export const validateString = (id, value) => {
   const validationResult = validate({ [id]: value }, { [id]: constraints });
   return validationResult && validationResult[id][0];
 };
+
+export const validateClubNameAndCity = (id, value) => {
+  const constraints = {
+    presence: { allowEmpty: false },
+  };
+  if (value !== "") {
+    constraints.format = {
+      pattern: "^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$",
+      flags: "i",
+      message: "value can only contain letters",
+    };
+  }
+  const validationResult = validate({ [id]: value }, { [id]: constraints });
+  return validationResult && validationResult[id][0];
+}
 
 export const validateEmail = (id, value) => {
     const constraints = {

@@ -1,9 +1,10 @@
-import { ScrollView, TouchableOpacity, Text } from "react-native";
-import React, { useState, useReducer, useCallback } from "react";
+import { Alert, ActivityIndicator } from "react-native";
+import React, { useState, useReducer, useCallback, useEffect } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+import { useDispatch } from 'react-redux'
 
 import Input from "./Input";
 import LabeledSlider from "./LabeledSlider";
@@ -11,6 +12,7 @@ import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authActions";
+import colors from "../constans/colors";
 
 const initialState = {
   inputValues: {
@@ -35,40 +37,56 @@ const initialState = {
   formIsValid: false,
 };
 
-
 const SignUp = () => {
+  const [state, dispatchForm] = useReducer(reducer, initialState);
+  const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useDispatch()
 
   const inputChangedHandler = useCallback(
     (inputId, inputValue) => {
       const result = validateInput(inputId, inputValue);
-      dispatch({ inputValue, inputId, validationResult: result });
+      dispatchForm({ inputValue, inputId, validationResult: result });
     },
-    [dispatch]
+    [dispatchForm]
   );
 
   const onSliderChange = (id, value) => {
-    dispatch({
+    dispatchForm({
       inputId: id,
       inputValue: value,
       validationResult: undefined,
     });
   };
 
-  const authHandler = () => {
-    signUp(
-      state.inputValues.firstName,
-      state.inputValues.lastName,
-      state.inputValues.clubName,
-      state.inputValues.city,
-      state.inputValues.email,
-      state.inputValues.password,
-      state.inputValues.experience,
-      state.inputValues.fights,
-      state.inputValues.weight
-    );
-  };
+  const authHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const action = signUp(
+        state.inputValues.firstName,
+        state.inputValues.lastName,
+        state.inputValues.clubName,
+        state.inputValues.city,
+        state.inputValues.email,
+        state.inputValues.password,
+        state.inputValues.experience,
+        state.inputValues.fights,
+        state.inputValues.weight
+      );
+      await dispatch(action);
+    } catch (error) {
+      console.log(error.message);
+      setErrorMessage(error.message);
+      setIsLoading(false);
+    }
+  }, [dispatch, state]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      Alert.alert("An error occured", errorMessage);
+    }
+  }, [errorMessage]);
 
   return (
     <>
@@ -92,7 +110,7 @@ const SignUp = () => {
         size={24}
         color="black"
         placeholder="Enter your last name"
-        label="Second Name"
+        label="Last Name"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["lastName"]}
         value={state.inputValues["lastName"]}
@@ -181,12 +199,15 @@ const SignUp = () => {
         value={state.inputValues.weight}
         onChange={(value) => onSliderChange("weight", value)}
       />
-
-      <SubmitButton
-        title="Sign Up"
-        onPress={authHandler}
-        disabled={!state.formIsValid}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="small" color={colors.primaryColor} />
+      ) : (
+        <SubmitButton
+          title="Sign Up"
+          onPress={authHandler}
+          disabled={!state.formIsValid}
+        />
+      )}
     </>
   );
 };
