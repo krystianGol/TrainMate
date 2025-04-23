@@ -1,10 +1,11 @@
 import { getFirebaseApp } from "../firebaseHelper";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { child, getDatabase, ref, set } from "firebase/database";
+import { child, getDatabase, ref, set, push, update } from "firebase/database";
 import { useDispatch } from "react-redux";
 import { authenticate, logout } from "../../store/authSlice"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserData } from "./userActions";
+
 
 let timer;
 
@@ -138,10 +139,29 @@ const saveDataToStorage = (token, userId, expiryDate) => {
     AsyncStorage.setItem('userData', userData);
 }
 
-const logoutUser = () => {
+export const logoutUser = () => {
   return async dispatch => {
     AsyncStorage.clear();
     clearTimeout(timer);
     dispatch(logout());
+  }
+}
+
+export const updateUserData = async (userId, userData) => {
+  const app = getFirebaseApp();
+  const db = ref(getDatabase(app));
+  const userRef = child(db, `users/${userId}`);
+
+  if (userData.firstName && userData.lastName) {
+    const firstAndLastName = `${userData.firstName} ${userData.lastName}`.toLowerCase();
+    userData.firstAndLastName = firstAndLastName;
+  }
+
+  try {
+    await update(userRef, userData);
+    console.log("User data updated successfully.");
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    throw error;
   }
 }
