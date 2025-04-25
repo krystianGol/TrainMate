@@ -89,6 +89,9 @@ const NewChatScreen = (props) => {
                 profilePicture={userData.profilePicture}
                 city={userData.city}
                 clubName={userData.clubName}
+                experience={userData.experience}
+                fights={userData.fights}
+                weight={userData.weight}
               />
             )
           }}

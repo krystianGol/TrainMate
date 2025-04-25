@@ -24,7 +24,7 @@ const initialState = {
     password: "",
     experience: 0,
     fights: 0,
-    weight: 0,
+    weight: 30,
   },
   inputValidities: {
     firstName: false,

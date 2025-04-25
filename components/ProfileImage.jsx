@@ -63,7 +63,7 @@ const ProfileImage = (props) => {
         ) : (
           <>
             <Image
-              source={props.image || image}
+              source={image}
               style={{
                 ...styles.image,
                 ...{ height: props.height, width: props.width },

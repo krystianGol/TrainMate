@@ -5,31 +5,37 @@ import ProfileImage from "./ProfileImage";
 
 const DataItem = (props) => {
   return (
-    <TouchableWithoutFeedback>
-    <View style={styles.dataContainer}>
-      <ProfileImage 
-        image={props.profilePicture} 
-        height={50}
-        width={50}
-        newChat={true}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.nameText}>
-          {props.firstName} {props.lastName}
-        </Text>
-        <Text style={styles.subText}>
-          {props.city} {props.clubName ? `• ${props.clubName}` : ''}
-        </Text>
+    <TouchableWithoutFeedback onPress={props.onPress}>
+      <View style={styles.dataContainer}>
+        <ProfileImage
+          uri={props.profilePicture}
+          height={50}
+          width={50}
+          newChat={true}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.nameText}>
+            {props.firstName} {props.lastName}
+          </Text>
+          <Text style={styles.subText}>
+            {props.city} {props.clubName ? `• ${props.clubName}` : ""}
+          </Text>
+          <Text style={styles.subText}>
+            <Text style={styles.subText}>
+              Boxing: {props.experience} yrs • {props.fights} fights •{" "}
+              {props.weight}kg
+            </Text>
+          </Text>
+        </View>
       </View>
-    </View>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   dataContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
@@ -39,15 +45,15 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
-    letterSpacing: 0.3
+    fontWeight: "600",
+    color: "#000",
+    letterSpacing: 0.3,
   },
   subText: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
     marginTop: 2,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
 });
 
