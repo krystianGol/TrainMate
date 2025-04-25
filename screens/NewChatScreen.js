@@ -19,12 +19,15 @@ import NoUsersFound from "../components/NoUsersFound";
 import StartSearchHint from "../components/StartSearchHint";
 import { searchUsers } from "../utils/actions/userActions";
 import DataItem from "../components/DataItem";
+import { useSelector } from "react-redux";
 
 const NewChatScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState();
   const [noResultFound, setNoResultFound] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const userData = useSelector(state => state.auth.userData);
 
   useEffect(() => {
     props.navigation.setOptions({
@@ -47,8 +50,8 @@ const NewChatScreen = (props) => {
 
       setIsLoading(true);
       const usersResult = await searchUsers(searchTerm);
+      delete usersResult[userData.userId]
       setUsers(usersResult);
-      console.log(usersResult)
 
       if (Object.keys(usersResult).length === 0) {
         setNoResultFound(true);
