@@ -115,12 +115,15 @@ const ProfileScreen = () => {
 
   return (
     <PageContainer>
+      <SafeAreaView>
+      <ScrollView>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ProfileImage 
           userId={userData.userId}
           uri={userData.profilePicture}
           height={90}
           width={90}
+          newChat={false}
         />
       </View>
       <Input
@@ -229,6 +232,8 @@ const ProfileScreen = () => {
         )
       )}
       <SubmitButton title="Logout" onPress={() => dispatch(logoutUser())} />
+      </ScrollView>
+      </SafeAreaView>
     </PageContainer>
   );
 };

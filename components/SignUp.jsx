@@ -151,6 +151,7 @@ const SignUp = () => {
         size={24}
         color="black"
         placeholder="Enter your email"
+        autoCapitalize="none"
         label="Email"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}

@@ -53,29 +53,30 @@ const ProfileImage = (props) => {
     }
   };
 
+  const Container = props.newChat ? View : TouchableOpacity;
+
   return (
     <>
-      <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
+      <Container style={styles.imageContainer} onPress={pickImage}>
         {isLoading ? (
-          <ActivityIndicator 
-            size={'small'}
-            color={colors.primaryColor}
-          />
+          <ActivityIndicator size={"small"} color={colors.primaryColor} />
         ) : (
           <>
             <Image
-              source={image}
+              source={props.image || image}
               style={{
                 ...styles.image,
                 ...{ height: props.height, width: props.width },
               }}
             />
-            <View style={styles.iconContainer}>
-              <Feather name="edit-2" size={18} color="black" />
-            </View>
+            {!props.newChat && (
+              <View style={styles.iconContainer}>
+                <Feather name="edit-2" size={18} color="black" />
+              </View>
+            )}
           </>
         )}
-      </TouchableOpacity>
+      </Container>
     </>
   );
 };

@@ -18,7 +18,7 @@ const Input = (props) => {
           name={props.iconName}
           size={props.size || 20}
           color={props.color}
-        />
+        />  
         <TextInput
           {...props}
           style={styles.textBox}
