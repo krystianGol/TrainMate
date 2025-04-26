@@ -16,18 +16,23 @@ import { useSelector } from "react-redux";
 import Bubble from "../components/Bubble";
 import PageContainer from "../components/PageContainer";
 import { createNewChat } from "../utils/actions/ChatActions";
+import { store } from "../store/store";
 
 
 const ChatScreen = (props) => {
-  const newChatData = props.route?.params?.newChatData;
-  const storedUsers = useSelector(state => state.users.storedUsers);
-  const userData = useSelector(state => state.auth.userData);
 
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(props.route?.params?.chatId);
 
+  const storedUsers = useSelector(state => state.users.storedUsers);
+  const storedChats = useSelector(state => state.chats.chatsData);
+  const userData = useSelector(state => state.auth.userData);
+
+  const chatData = (chatId && storedChats[chatId]) || props.route?.params?.newChatData;
+
+
   const getChatTitleFromName = () => {
-    const userIdToChatWith = newChatData.users[0];
+    const userIdToChatWith = chatData.users[0];
     const userDataToChatWith = storedUsers[userIdToChatWith]
 
     return `${userDataToChatWith.firstName} ${userDataToChatWith.lastName}`
@@ -44,7 +49,7 @@ const ChatScreen = (props) => {
     try {
       let id = chatId;
       if (!id) {
-        id = await createNewChat(userData.userId, newChatData);
+        id = await createNewChat(userData.userId, chatData);
         setChatId(id);
       }
     } catch (error) {

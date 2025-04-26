@@ -1,16 +1,26 @@
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { StyleSheet, FlatList, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Entypo from '@expo/vector-icons/Entypo';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import DataItem from '../components/DataItem';
 
 const ChatListScreen = (props) => {
 
     const selectedUser = props.route?.params?.selectedUserId;
-    const userData = useSelector(state => state.auth.userData)
-    
+
+    const userData = useSelector(state => state.auth.userData);
+    const storedUsers = useSelector(state => state.users.storedUsers);
+
+    const userChats = useSelector(state => {
+      const chatsData = state.chats.chatsData;
+      return Object.values(chatsData).sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+    });
+
     useEffect(() => {
       props.navigation.setOptions({
         headerRight: () => (
@@ -43,19 +53,31 @@ const ChatListScreen = (props) => {
     }, [selectedUser])
 
   return (
-    <View style={styles.container}>
-      <Text>ChatListScreen</Text>
-      <Button title="Go to chat screen" onPress={() => props.navigation.navigate("ChatScreen")} />
-    </View>
+    <FlatList 
+      data={userChats}
+      renderItem={(itemData) => {
+        const otherUsersId = itemData.item.users.find(uid => uid !== userData.userId);
+        const otherUser = storedUsers[otherUsersId];
+        const chatId = itemData.item.key
+
+        if (!otherUser) {
+          return;
+        }
+        return (
+        <DataItem
+          firstName={otherUser.firstName}
+          lastName={otherUser.lastName}
+          profilePicture={otherUser.profilePicture}
+          city={otherUser.city}
+          clubName={otherUser.clubName}
+          experience={otherUser.experience}
+          fights={otherUser.fights}
+          weight={otherUser.weight}
+          onPress={() => props.navigation.navigate("ChatScreen", {chatId})}
+        />);
+      }}
+    />
   )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
 
 export default ChatListScreen
