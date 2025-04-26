@@ -8,21 +8,64 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useSelector } from "react-redux";
+
+import Bubble from "../components/Bubble";
+import PageContainer from "../components/PageContainer";
+import { createNewChat } from "../utils/actions/ChatActions";
 
 
-const ChatScreen = () => {
-  const [messageText, setMessageText] = useState("")
+const ChatScreen = (props) => {
+  const newChatData = props.route?.params?.newChatData;
+  const storedUsers = useSelector(state => state.users.storedUsers);
+  const userData = useSelector(state => state.auth.userData);
 
-  const sendMessage = useCallback(() => {
+  const [messageText, setMessageText] = useState("");
+  const [chatId, setChatId] = useState(props.route?.params?.chatId);
+
+  const getChatTitleFromName = () => {
+    const userIdToChatWith = newChatData.users[0];
+    const userDataToChatWith = storedUsers[userIdToChatWith]
+
+    return `${userDataToChatWith.firstName} ${userDataToChatWith.lastName}`
+  }
+
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerTitle: getChatTitleFromName(),
+    })
+  }, [])
+
+  const sendMessage = useCallback(async () => {
+
+    try {
+      let id = chatId;
+      if (!id) {
+        id = await createNewChat(userData.userId, newChatData);
+        setChatId(id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setMessageText("")
   }, [messageText])
 
   return (
     <SafeAreaView edges={["right", "left", "bottom"]} style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={110} style={{ flex: 1 }}>
+
+      <PageContainer>
+        { !chatId && (
+          <Bubble 
+            text="This is new Chat"
+            type="system"
+          />
+        )}
+      </PageContainer>
+
       <View style={styles.inputContainer}>
       <TouchableOpacity 
         style={styles.mediaButton}

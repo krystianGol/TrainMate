@@ -19,7 +19,9 @@ import NoUsersFound from "../components/NoUsersFound";
 import StartSearchHint from "../components/StartSearchHint";
 import { searchUsers } from "../utils/actions/userActions";
 import DataItem from "../components/DataItem";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { CommonActions } from "@react-navigation/native";
+import { setStoredUsers } from "../store/userSlice";
 
 const NewChatScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +30,7 @@ const NewChatScreen = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const userData = useSelector(state => state.auth.userData);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     props.navigation.setOptions({
@@ -57,12 +60,35 @@ const NewChatScreen = (props) => {
         setNoResultFound(true);
       } else {
         setNoResultFound(false);
+
+        dispatch(setStoredUsers({ newUsers: usersResult }));
       }
       setIsLoading(false);
     }, 500);
 
     return () => clearTimeout(delayTime);
   }, [searchTerm]);
+
+  const handlePress = (userId) => {
+    props.navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: "Home",
+                state: {
+                  routes: [
+                    {
+                      name: "ChatList",
+                      params: { selectedUserId: userId },
+                    },
+                  ],
+                },
+              },
+            ],
+          })
+        );
+  }
 
   return (
     <PageContainer>
@@ -95,6 +121,7 @@ const NewChatScreen = (props) => {
                 experience={userData.experience}
                 fights={userData.fights}
                 weight={userData.weight}
+                onPress={() => handlePress(userData.userId)}
               />
             )
           }}

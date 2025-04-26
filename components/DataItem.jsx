@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import React from "react";
 
 import ProfileImage from "./ProfileImage";
+import colors from "../constans/colors";
 
 const DataItem = (props) => {
   return (
@@ -38,6 +39,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.extraLightGrey,
+    borderRadius: 2,
   },
   textContainer: {
     marginLeft: 12,

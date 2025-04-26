@@ -7,5 +7,5 @@ export default {
     textColor: '#1c1e21',
     primaryColor: '#77aaff',
     red: '#e74c3c',
-    beigne: "#FEF5C3",
+    beige: '#FEF5C3'
 }

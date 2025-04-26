@@ -4,9 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useSelector } from 'react-redux';
 
 const ChatListScreen = (props) => {
 
+    const selectedUser = props.route?.params?.selectedUserId;
+    const userData = useSelector(state => state.auth.userData)
+    
     useEffect(() => {
       props.navigation.setOptions({
         headerRight: () => (
@@ -22,6 +26,21 @@ const ChatListScreen = (props) => {
         )
       })
     }, [])
+
+    useEffect(() => {
+
+      if (!selectedUser) {
+        return;
+      }
+
+      const chatUsers = [selectedUser, userData.userId]
+
+      const navigationProps = {
+        newChatData: {users: chatUsers}
+      }
+
+      props.navigation.navigate("ChatScreen", navigationProps);
+    }, [selectedUser])
 
   return (
     <View style={styles.container}>
