@@ -121,6 +121,7 @@ const NewChatScreen = (props) => {
                 experience={userData.experience}
                 fights={userData.fights}
                 weight={userData.weight}
+                chatListScreen={false}
                 onPress={() => handlePress(userData.userId)}
               />
             )

@@ -18,15 +18,26 @@ const DataItem = (props) => {
           <Text style={styles.nameText}>
             {props.firstName} {props.lastName}
           </Text>
-          <Text style={styles.subText}>
-            {props.city} {props.clubName ? `• ${props.clubName}` : ""}
-          </Text>
-          <Text style={styles.subText}>
-            <Text style={styles.subText}>
-              Boxing: {props.experience} yrs • {props.fights} fights •{" "}
-              {props.weight}kg
-            </Text>
-          </Text>
+
+          {!props.chatListScreen ? (
+            <>
+              <Text style={styles.subText}>
+                {props.city} {props.clubName ? `• ${props.clubName}` : ""}
+              </Text>
+              <Text style={styles.subText}>
+                Boxing: {props.experience} yrs • {props.fights} fights • {props.weight}kg
+              </Text>
+            </>
+          ) : (
+            <>
+              {props.latestMessage && (
+                <Text style={styles.subText} numberOfLines={1}>
+                  {props.latestMessage}
+                </Text>
+              )}
+            </>
+          )}
+          
         </View>
       </View>
     </TouchableWithoutFeedback>

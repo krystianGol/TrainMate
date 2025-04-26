@@ -16,6 +16,7 @@ import { getFirebaseApp } from "../utils/firebaseHelper";
 import { setStoredUsers } from "../store/userSlice";
 import { setChatsData } from "../store/chatSlice";
 import colors from "../constans/colors";
+import { setChatMessages } from "../store/messagesSlice";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -140,6 +141,13 @@ const MainNavigator = (props) => {
               dispatch(setChatsData({ chatsData }));
               setIsLoading(false);
             }
+          })
+          const messagesRef = child(db, `messages/${chatId}`);
+          refs.push(messagesRef);
+
+          onValue(messagesRef, (messagesSnapshot) => {
+            const messagesData = messagesSnapshot.val();
+            dispatch(setChatMessages({chatId, messagesData}))
           })
           if (chatsCounter === 0) {
             setIsLoading(false);

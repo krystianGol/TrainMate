@@ -59,6 +59,7 @@ const ChatListScreen = (props) => {
         const otherUsersId = itemData.item.users.find(uid => uid !== userData.userId);
         const otherUser = storedUsers[otherUsersId];
         const chatId = itemData.item.key
+        const latestMessage = itemData.item.latestMessageText || "New chat";
 
         if (!otherUser) {
           return;
@@ -68,11 +69,8 @@ const ChatListScreen = (props) => {
           firstName={otherUser.firstName}
           lastName={otherUser.lastName}
           profilePicture={otherUser.profilePicture}
-          city={otherUser.city}
-          clubName={otherUser.clubName}
-          experience={otherUser.experience}
-          fights={otherUser.fights}
-          weight={otherUser.weight}
+          chatListScreen={true}
+          latestMessage={latestMessage}
           onPress={() => props.navigation.navigate("ChatScreen", {chatId})}
         />);
       }}

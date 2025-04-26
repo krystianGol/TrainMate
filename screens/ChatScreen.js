@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import Bubble from "../components/Bubble";
 import PageContainer from "../components/PageContainer";
 import { createNewChat } from "../utils/actions/ChatActions";
-import { store } from "../store/store";
+import { sendTextMessage } from "../utils/actions/ChatActions";
 
 
 const ChatScreen = (props) => {
@@ -27,6 +27,8 @@ const ChatScreen = (props) => {
   const storedUsers = useSelector(state => state.users.storedUsers);
   const storedChats = useSelector(state => state.chats.chatsData);
   const userData = useSelector(state => state.auth.userData);
+  const messagesData = useSelector(state => state.messages.messagesData);
+  console.log(messagesData);
 
   const chatData = (chatId && storedChats[chatId]) || props.route?.params?.newChatData;
 
@@ -52,6 +54,7 @@ const ChatScreen = (props) => {
         id = await createNewChat(userData.userId, chatData);
         setChatId(id);
       }
+      await sendTextMessage(id, userData.userId, messageText);
     } catch (error) {
       console.log(error);
     }
