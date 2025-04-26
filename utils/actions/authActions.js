@@ -110,7 +110,7 @@ const createUser = async (
   fights,
   weight
 ) => {
-  const firstAndLastName = `${firstName} ${lastName}`.toLowerCase();
+  const fullUserInfo = `${firstName} ${lastName} ${city}, ${clubName}`.toLowerCase();
   const userData = {
     userId,
     firstName,
@@ -121,7 +121,7 @@ const createUser = async (
     experience,
     fights,
     weight,
-    firstAndLastName,
+    fullUserInfo,
     signUpDate: new Date().toISOString(),
   };
   const db = ref(getDatabase());

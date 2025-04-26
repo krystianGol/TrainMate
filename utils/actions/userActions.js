@@ -27,21 +27,28 @@ export const searchUsers = async (queryTerm) => {
 
   try {
     const app = getFirebaseApp();
-    const db = ref(getDatabase(app));
-    const userRef = child(db, "users");
-    const queryRef = query(
-      userRef,
-      orderByChild("firstAndLastName"),
-      startAt(searchTerm),
-      endAt(searchTerm + "\uf8ff")
-    );
-    const snapshot = await get(queryRef);
+    const dbRef = ref(getDatabase(app));
+    const snapshot = await get(child(dbRef, "users"));
 
     if (snapshot.exists()) {
-      return snapshot.val();
+      const users = snapshot.val();
+
+      const filteredUsers = Object.keys(users).reduce((acc, key) => {
+        const user = users[key];
+        const fullInfo = user.fullUserInfo?.toLowerCase() || "";
+
+        if (fullInfo.includes(searchTerm)) {
+          acc[key] = user;
+        }
+        return acc;
+      }, {});
+
+      return filteredUsers;
     }
+
     return {};
   } catch (error) {
     console.log(error);
+    return {};
   }
 };

@@ -15,7 +15,7 @@ const testMode = true;
 
 const initialState = {
   inputValues: {
-    email: testMode ? "krystian@gmail.com" : "",
+    email: testMode ? "krystianrafalgolda@gmail.com" : "",
     password: testMode ? "123456" : "",
   },
   inputValidities: {
