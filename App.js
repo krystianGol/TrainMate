@@ -6,7 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MenuProvider } from "react-native-popup-menu";
 
 import AppNavigator from "./navigation/AppNavigator";
 
@@ -55,7 +55,9 @@ export default function App() {
     <Provider store={store}>
       <SafeAreaProvider style={styles.container} onLayout={onLayout}>
         <StatusBar style="dark" />
-        <AppNavigator />
+        <MenuProvider>
+          <AppNavigator />
+        </MenuProvider>
       </SafeAreaProvider>
     </Provider>
   );
