@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState, useCallback, useEffect } from "react";
@@ -23,12 +24,32 @@ const ChatScreen = (props) => {
 
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(props.route?.params?.chatId);
+  const [errorText, setErrorText] = useState("");
 
   const storedUsers = useSelector(state => state.users.storedUsers);
   const storedChats = useSelector(state => state.chats.chatsData);
   const userData = useSelector(state => state.auth.userData);
-  const messagesData = useSelector(state => state.messages.messagesData);
-  console.log(messagesData);
+
+  const messagesData = useSelector(state => {
+    if (!chatId) return [];
+    
+    const chatMessagesData = state.messages.messagesData[chatId];
+
+    if (!chatMessagesData) return [];
+
+    const messageList = [];
+
+    for (const key in chatMessagesData) {
+      const message = chatMessagesData[key];
+      messageList.push({
+        key,
+        ...message
+      });
+    }
+    return messageList;
+  });
+
+  console.log(messagesData)
 
   const chatData = (chatId && storedChats[chatId]) || props.route?.params?.newChatData;
 
@@ -56,6 +77,7 @@ const ChatScreen = (props) => {
       }
       await sendTextMessage(id, userData.userId, messageText);
     } catch (error) {
+      setErrorText("Message failed to send");
       console.log(error);
     }
     setMessageText("")
@@ -72,6 +94,37 @@ const ChatScreen = (props) => {
             type="system"
           />
         )}
+        {
+          errorText && (
+            <Bubble 
+              text={errorText}
+              type='error'
+            />
+          )
+        }
+        {
+          messagesData && (
+            <FlatList 
+              data={messagesData}
+              renderItem={(itemData) => {
+                const message = itemData.item;
+                const senderId = message.sentBy;
+
+                if (senderId === userData.userId) {
+                  return <Bubble 
+                    type="myMessage"
+                    text={message.text}
+                />
+                } else {
+                  return <Bubble 
+                    type="theirMessage"
+                    text={message.text}
+                    />
+                }
+              }}
+            />
+          )
+        }
       </PageContainer>
 
       <View style={styles.inputContainer}>
