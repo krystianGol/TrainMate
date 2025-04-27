@@ -29,7 +29,8 @@ const NewChatScreen = (props) => {
   const [noResultFound, setNoResultFound] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const userData = useSelector(state => state.auth.userData);
+  const userData = useSelector((state) => state.auth.userData);
+  const chatsData = useSelector((state) => state.chats.chatsData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const NewChatScreen = (props) => {
 
       setIsLoading(true);
       const usersResult = await searchUsers(searchTerm);
-      delete usersResult[userData.userId]
+      delete usersResult[userData.userId];
       setUsers(usersResult);
 
       if (Object.keys(usersResult).length === 0) {
@@ -69,26 +70,63 @@ const NewChatScreen = (props) => {
     return () => clearTimeout(delayTime);
   }, [searchTerm]);
 
+  // FIX THIS
   const handlePress = (userId) => {
-    props.navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: "Home",
-                state: {
-                  routes: [
-                    {
-                      name: "ChatList",
-                      params: { selectedUserId: userId },
-                    },
-                  ],
-                },
+    let existingChatId = null;
+
+    for (const key in chatsData) {
+      const chat = chatsData[key];
+      if (
+        chat.users.includes(userId) &&
+        chat.users.includes(userData.userId) &&
+        chat.users.length === 2
+      ) {
+        existingChatId = key;
+        break;
+      }
+    }
+
+    if (existingChatId) {
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: "Home",
+              state: {
+                routes: [
+                  {
+                    name: "ChatList",
+                    params: { chatId: existingChatId },
+                  },
+                ],
               },
-            ],
-          })
-        );
-  }
+            },
+          ],
+        })
+      );
+    } else {
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: "Home",
+              state: {
+                routes: [
+                  {
+                    name: "ChatList",
+                    params: { selectedUserId: userId },
+                  },
+                ],
+              },
+            },
+          ],
+        })
+      );
+    }
+    
+  };
 
   return (
     <PageContainer>
@@ -124,15 +162,15 @@ const NewChatScreen = (props) => {
                 chatListScreen={false}
                 onPress={() => handlePress(userData.userId)}
               />
-            )
+            );
           }}
         />
       )}
       {isLoading && (
         <View
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      >
-        <ActivityIndicator size="large" color={colors.primaryColor} />
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.primaryColor} />
         </View>
       )}
       {!isLoading && (!users || noResultFound) && (

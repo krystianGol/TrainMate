@@ -75,6 +75,7 @@ const SignIn = () => {
         placeholder="Enter your email"
         label="Email"
         keyboardType="email-address"
+        autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["email"]}
         value={state.inputValues["email"]}

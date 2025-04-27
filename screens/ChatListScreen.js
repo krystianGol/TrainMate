@@ -10,6 +10,7 @@ import DataItem from '../components/DataItem';
 const ChatListScreen = (props) => {
 
     const selectedUser = props.route?.params?.selectedUserId;
+    const existingChatId = props.route?.params?.chatId;
 
     const userData = useSelector(state => state.auth.userData);
     const storedUsers = useSelector(state => state.users.storedUsers);
@@ -20,6 +21,7 @@ const ChatListScreen = (props) => {
         return new Date(b.updatedAt) - new Date(a.updatedAt);
       });
     });
+
 
     useEffect(() => {
       props.navigation.setOptions({
@@ -37,20 +39,22 @@ const ChatListScreen = (props) => {
       })
     }, [])
 
-    useEffect(() => {
-
-      if (!selectedUser) {
-        return;
-      }
-
-      const chatUsers = [selectedUser, userData.userId]
-
-      const navigationProps = {
-        newChatData: {users: chatUsers}
-      }
-
-      props.navigation.navigate("ChatScreen", navigationProps);
-    }, [selectedUser])
+    if (existingChatId) {
+      useEffect(() => {
+        props.navigation.navigate("ChatScreen", { chatId: existingChatId });
+      }, [existingChatId])
+    } else {
+      useEffect(() => {
+        if (!selectedUser) {
+          return;
+        }
+        const chatUsers = [selectedUser, userData.userId];
+        const navigationProps = {
+          newChatData: { users: chatUsers },
+        };
+        props.navigation.navigate("ChatScreen", navigationProps);
+      }, [selectedUser, userChats])
+    }
 
   return (
     <FlatList 
