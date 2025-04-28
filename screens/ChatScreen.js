@@ -18,6 +18,7 @@ import Bubble from "../components/Bubble";
 import PageContainer from "../components/PageContainer";
 import { createNewChat } from "../utils/actions/ChatActions";
 import { sendTextMessage } from "../utils/actions/ChatActions";
+import ReplayTo from "../components/ReplayTo";
 
 
 const ChatScreen = (props) => {
@@ -25,6 +26,11 @@ const ChatScreen = (props) => {
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(props.route?.params?.chatId);
   const [errorText, setErrorText] = useState("");
+  const [replayingTo, setReplayingTo] = useState();
+
+  if (replayingTo) {
+    console.log(replayingTo.key)
+  }
 
   const storedUsers = useSelector(state => state.users.storedUsers);
   const storedChats = useSelector(state => state.chats.chatsData);
@@ -73,7 +79,10 @@ const ChatScreen = (props) => {
         id = await createNewChat(userData.userId, chatData);
         setChatId(id);
       }
-      await sendTextMessage(id, userData.userId, messageText);
+      await sendTextMessage(id, userData.userId, messageText, replayingTo && replayingTo.key);
+
+      setMessageText("");
+      setReplayingTo();
     } catch (error) {
       setErrorText("Message failed to send");
       console.log(error);
@@ -112,11 +121,14 @@ const ChatScreen = (props) => {
                   return <Bubble 
                     type="myMessage"
                     text={message.text}
+                    setReplay={() => setReplayingTo(message)}
+                    replayingTo={message.replayTo && messagesData.find(i => i.key === message.replayTo) }
                 />
                 } else {
                   return <Bubble 
                     type="theirMessage"
                     text={message.text}
+                    setReplay={() => setReplayingTo(message)}
                     />
                 }
               }}
@@ -124,6 +136,15 @@ const ChatScreen = (props) => {
           )
         }
       </PageContainer>
+
+      {
+        replayingTo && 
+          <ReplayTo 
+            text={replayingTo.text}
+            user={storedUsers[replayingTo.sentBy]}
+            onCancel={() => setReplayingTo()}
+          />
+      }
 
       <View style={styles.inputContainer}>
       <TouchableOpacity 
