@@ -20,6 +20,28 @@ export const lunchImagePicker = async () => {
   }
 };
 
+export const openCamera = async () => {
+  
+  const permissionResult = ImagePicker.requestCameraPermissionsAsync();
+
+  if (permissionResult.granted === false) {
+    return Promise.reject("We need permission to access your camera");;
+  }
+
+  let result = await ImagePicker.launchCameraAsync({
+    mediaTypes: ["images"],
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+  });
+  console.log(result);
+
+  if (!result.canceled) {
+    return result.assets[0];
+  }
+  
+};
+
 const checkMediaPermissions = async () => {
   if (Platform !== "web") {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -30,7 +52,7 @@ const checkMediaPermissions = async () => {
   return Promise.resolve();
 };
 
-export async function uploadImageAsync(uri) {
+export async function uploadImageAsync(uri, isChatImage = false) {
     const app = getFirebaseApp();
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -46,7 +68,7 @@ export async function uploadImageAsync(uri) {
       xhr.send(null);
     });
     
-    const pathFolder = "profilePics";
+    const pathFolder = isChatImage ? "chatImages" : "profilePics";
     const storageRef = ref(getStorage(app), `${pathFolder}/${uuid.v4()}`);
     await uploadBytes(storageRef, blob);
     blob.close();

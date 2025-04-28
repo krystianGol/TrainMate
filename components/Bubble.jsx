@@ -1,5 +1,11 @@
 import React, { use, useRef } from "react";
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Image,
+} from "react-native";
 import {
   Menu,
   MenuOptions,
@@ -97,11 +103,17 @@ const Bubble = (props) => {
           {replayingToUser && (
             <View style={styles.replyPreview}>
               <Text style={styles.replyPreviewText} numberOfLines={2}>
-                {props.replayingTo.text}
+              {props.replayingTo?.text && <Text>{props.replayingTo.text}</Text>}
+              {!props.replayingTo?.text && props.replayingTo?.imageUrl && <Text>📷 Sent a photo</Text>}
               </Text>
             </View>
           )}
-          <Text style={textStyle}>{text}</Text>
+
+          {!props.imageUrl && <Text style={textStyle}>{text}</Text>}
+
+          {props.imageUrl && (
+            <Image source={{ uri: props.imageUrl }} style={styles.image} />
+          )}
           <Menu name={id.current} ref={menuRef}>
             <MenuTrigger />
             <MenuOptions>
@@ -169,6 +181,11 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
     fontSize: 12,
     color: "gray",
+  },
+  image: {
+    width: 300,
+    height: 300,
+    marginBottom: 5,
   },
 });
 

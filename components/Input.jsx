@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   label: {
-    marginVertical: 8,
+    marginVertical: 5,
     fontFamily: "bold",
     letterSpacing: 0.3,
     color: colors.textColor,

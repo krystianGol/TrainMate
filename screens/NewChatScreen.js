@@ -70,7 +70,6 @@ const NewChatScreen = (props) => {
     return () => clearTimeout(delayTime);
   }, [searchTerm]);
 
-  // FIX THIS
   const handlePress = (userId) => {
     let existingChatId = null;
 
