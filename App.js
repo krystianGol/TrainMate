@@ -7,6 +7,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import { MenuProvider } from "react-native-popup-menu";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import AppNavigator from "./navigation/AppNavigator";
 
@@ -53,12 +54,14 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <SafeAreaProvider style={styles.container} onLayout={onLayout}>
-        <StatusBar style="dark" />
-        <MenuProvider>
-          <AppNavigator />
-        </MenuProvider>
-      </SafeAreaProvider>
+      <GestureHandlerRootView>
+        <SafeAreaProvider style={styles.container} onLayout={onLayout}>
+          <StatusBar style="dark" />
+          <MenuProvider>
+            <AppNavigator />
+          </MenuProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     </Provider>
   );
 }

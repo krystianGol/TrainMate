@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList, Text } from 'react-native'
+import { StyleSheet, FlatList, Text, Modal } from 'react-native'
 import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import CustomHeaderButton from '../components/CustomHeaderButton';

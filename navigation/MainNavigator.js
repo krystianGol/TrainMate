@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -25,15 +25,12 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="ChatList"
-      screenOptions={{
-        headerTitle: "Chats",
-      }}
     >
       <Tab.Screen
         name="Calendar"
         component={CalendarScreen}
         options={{
-          headerShown: false,
+          title: "Calendar",
           tabBarLabel: "Calendar",
           tabBarIcon: () => (
             <FontAwesome name="calendar-check-o" size={24} color="black" />
@@ -44,6 +41,7 @@ function TabNavigator() {
         name="ChatList"
         component={ChatListScreen}
         options={{
+          title: "Chats",
           tabBarLabel: "Chats",
           tabBarIcon: () => (
             <Ionicons name="chatbubbles-outline" size={24} color="black" />
