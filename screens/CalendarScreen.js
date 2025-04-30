@@ -15,9 +15,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Platform } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { addEvent } from "../store/calendarSlice";
-import { saveEvent,loadEvents } from "../utils/actions/calendarActions";
+import { saveEvent,loadEvents, removeEventFromDatabase } from "../utils/actions/calendarActions";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { setEvents } from "../store/calendarSlice";
+import { setEvents, removeEvent } from "../store/calendarSlice";
 import EventItem from "../components/EventItem";
 import PageContainer from "../components/PageContainer";
 
@@ -31,10 +31,6 @@ const CalendarScreen = (props) => {
   const dispatch = useDispatch();
   const events = useSelector(state => state.calendar.storedEvents[selectedDay] || [])
   const userData = useSelector(state => state.auth.userData);
-
-  if (events) {
-    console.log(events)
-  }
 
   const markedDates = {
     [selectedDay]: {
@@ -159,10 +155,16 @@ const CalendarScreen = (props) => {
             const eventData = itemData.item;
             const eventTime = eventData.time;
             const eventTitle = eventData.title;
+            const eventId = eventData.id;
+            console.log(eventData);
             return (
               <EventItem 
                 title={eventTitle}
                 time={eventTime}
+                onDelete={async () => {
+                  dispatch(removeEvent({ date: selectedDay, id: eventId }))
+                  await removeEventFromDatabase(userData.userId, eventId);
+                }}
               />
             )
           }}

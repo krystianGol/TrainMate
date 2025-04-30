@@ -1,5 +1,5 @@
 import { getFirebaseApp } from "../firebaseHelper";
-import { child, getDatabase, ref, set, push, get } from "firebase/database";
+import { child, getDatabase, ref, set, push, get, remove } from "firebase/database";
 
 export const saveEvent = async (loggedInUserId, eventData) => {
   try {
@@ -40,3 +40,16 @@ export const loadEvents = async (userId) => {
     return {};
   }
 };
+
+export const removeEventFromDatabase = async (loggedInUserId, eventId) => {
+  try {
+    const app = getFirebaseApp();
+    const db = ref(getDatabase(app));
+    const eventRef = child(db, `events/${loggedInUserId}/${eventId}`);
+
+    await remove(eventRef); 
+
+  } catch (error) { 
+      console.log(error);
+  }
+}
