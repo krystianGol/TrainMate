@@ -78,7 +78,7 @@ const CalendarScreen = (props) => {
       if (!userData?.userId) return;
       
       const loadedEvents = await loadEvents(userData.userId);
-      console.log(loadedEvents);
+      
       dispatch(setEvents(loadedEvents));
     };
   
@@ -156,7 +156,7 @@ const CalendarScreen = (props) => {
             const eventTime = eventData.time;
             const eventTitle = eventData.title;
             const eventId = eventData.id;
-            console.log(eventData);
+
             return (
               <EventItem 
                 title={eventTitle}

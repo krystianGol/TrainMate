@@ -7,9 +7,18 @@ import {
   KeyboardAvoidingView,
   Platform,
   FlatList,
+  Image,
+  TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useSelector } from "react-redux";
@@ -22,7 +31,13 @@ import {
   sendImageMessage,
 } from "../utils/actions/ChatActions";
 import ReplayTo from "../components/ReplayTo";
-import { lunchImagePicker, openCamera, uploadImageAsync } from "../utils/imagePickerHelper";
+import {
+  lunchImagePicker,
+  openCamera,
+  uploadImageAsync,
+} from "../utils/imagePickerHelper";
+import defaultProfilePicture from "../constans/images/userImage.jpeg";
+import colors from "../constans/colors";
 
 const ChatScreen = (props) => {
   const [messageText, setMessageText] = useState("");
@@ -31,6 +46,7 @@ const ChatScreen = (props) => {
   const [replayingTo, setReplayingTo] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [tempImageUri, setTempImageUri] = useState();
+  const [userInfoModalVisible, setUserInfoModalVisible] = useState(false);
 
   const flatList = useRef();
 
@@ -64,18 +80,39 @@ const ChatScreen = (props) => {
   const chatData =
     (chatId && storedChats[chatId]) || props.route?.params?.newChatData;
 
-  const getChatTitleFromName = () => {
-    const userIdToChatWith = chatData.users[0];
-    const userDataToChatWith = storedUsers[userIdToChatWith];
+  const userDataToChatWith = storedUsers[chatData.users[0]];
 
+  const getChatTitleFromName = () => {
     return `${userDataToChatWith.firstName} ${userDataToChatWith.lastName}`;
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     props.navigation.setOptions({
-      headerTitle: getChatTitleFromName(),
+      headerTitle: () => (
+        <TouchableWithoutFeedback onPress={() => setUserInfoModalVisible(true)}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexShrink: 1,
+            }}
+          >
+            <Image
+              source={
+                userDataToChatWith.profilePicture
+                  ? { uri: userDataToChatWith.profilePicture }
+                  : defaultProfilePicture
+              }
+              style={styles.chatScreenProfileImage}
+            />
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+              {getChatTitleFromName()}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      ),
     });
-  }, []);
+  }, [props.navigation]);
 
   const uploadImage = useCallback(async () => {
     setIsLoading(true);
@@ -83,7 +120,10 @@ const ChatScreen = (props) => {
       let id = chatId;
 
       if (!id) {
-        id = await createNewChat(userData.userId, props.route.params.newChatData);
+        id = await createNewChat(
+          userData.userId,
+          props.route.params.newChatData
+        );
         setChatId(id);
       }
 
@@ -101,7 +141,7 @@ const ChatScreen = (props) => {
       if (!uploadUri) {
         throw new Error("Could not upload image");
       }
-      console.log(replayingTo)
+      console.log(replayingTo);
       await sendImageMessage(
         chatId,
         userData.userId,
@@ -113,8 +153,8 @@ const ChatScreen = (props) => {
     } catch (error) {
       setErrorText("Message failed to send");
       setTimeout(() => {
-        setErrorText("")
-      }, 2000)
+        setErrorText("");
+      }, 2000);
       console.log(error);
     }
     setIsLoading(false);
@@ -123,43 +163,45 @@ const ChatScreen = (props) => {
   const takePhoto = useCallback(async () => {
     try {
       const result = await openCamera();
-      console.log(result)
+      console.log(result);
       if (!result || result.cancelled) return;
-      
+
       const tempUri = result.uri;
-  
+
       setTempImageUri(tempUri);
-  
+
       setIsLoading(true);
       let id = chatId;
       if (!id) {
-        id = await createNewChat(userData.userId, props.route.params.newChatData);
+        id = await createNewChat(
+          userData.userId,
+          props.route.params.newChatData
+        );
         setChatId(id);
       }
-  
+
       const currentReplayingTo = replayingTo;
-  
+
       const uploadUri = await uploadImageAsync(tempUri, true);
-  
+
       if (!uploadUri) {
         throw new Error("Could not upload image");
       }
-  
+
       await sendImageMessage(
         id,
         userData.userId,
         uploadUri,
         currentReplayingTo && currentReplayingTo.key
       );
-  
+
       setTempImageUri("");
       setReplayingTo();
-  
     } catch (error) {
       setErrorText("Message failed to send");
       setTimeout(() => {
-        setErrorText("")
-      }, 2000)
+        setErrorText("");
+      }, 2000);
       console.log(error);
     }
     setIsLoading(false);
@@ -184,8 +226,8 @@ const ChatScreen = (props) => {
     } catch (error) {
       setErrorText("Message failed to send");
       setTimeout(() => {
-        setErrorText("")
-      }, 2000)
+        setErrorText("");
+      }, 2000);
       console.log(error);
     }
     setMessageText("");
@@ -203,14 +245,16 @@ const ChatScreen = (props) => {
           {errorText && <Bubble text={errorText} type="error" />}
           {messagesData && (
             <FlatList
-              ref={(ref) => flatList.current = ref}
-              onContentSizeChange={() => flatList.current.scrollToEnd({ animated: false})}
-              onLayout={() => flatList.current.scrollToEnd({ animated: false})}
+              ref={(ref) => (flatList.current = ref)}
+              onContentSizeChange={() =>
+                flatList.current.scrollToEnd({ animated: false })
+              }
+              onLayout={() => flatList.current.scrollToEnd({ animated: false })}
               data={messagesData}
               renderItem={(itemData) => {
                 const message = itemData.item;
                 const senderId = message.sentBy;
-                
+
                 if (senderId === userData.userId) {
                   return (
                     <Bubble
@@ -240,6 +284,74 @@ const ChatScreen = (props) => {
                 }
               }}
             />
+          )}
+          {userInfoModalVisible && (
+            <Modal
+              visible={userInfoModalVisible}
+              transparent={true}
+              animationType="fade"
+              onRequestClose={() => setUserInfoModalVisible(false)}
+            >
+              <TouchableOpacity
+                activeOpacity={1}
+                onPressOut={() => setUserInfoModalVisible(false)}
+                style={{
+                  flex: 1,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    padding: 20,
+                    borderRadius: 15,
+                    alignItems: "center",
+                    width: "80%",
+                    maxWidth: 350,
+                  }}
+                >
+                  <Image
+                    source={
+                      userDataToChatWith.profilePicture
+                        ? { uri: userDataToChatWith.profilePicture }
+                        : defaultProfilePicture
+                    }
+                    style={styles.modalProfileImage}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
+                    {getChatTitleFromName()}
+                  </Text>
+                  <Text style={styles.modalUserInfoText}>
+                    {userDataToChatWith.city}
+                  </Text>
+                  <Text style={styles.modalUserInfoText}>
+                    {userDataToChatWith.clubName}
+                  </Text>
+                  <Text style={styles.modalUserInfoText}>
+                    Boxing: {userDataToChatWith.experience} yrs •{" "}
+                    {userDataToChatWith.fights} fights •{" "}
+                    {userDataToChatWith.weight}kg
+                  </Text>
+
+                  <TouchableOpacity
+                    onPress={() => setUserInfoModalVisible(false)}
+                    style={{ marginTop: 20 }}
+                  >
+                    <Text style={{ color: "#007AFF", fontWeight: "bold" }}>
+                      Close
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </Modal>
           )}
         </PageContainer>
 
@@ -298,6 +410,27 @@ const styles = StyleSheet.create({
   },
   mediaButton: {
     alignSelf: "center",
+  },
+  chatScreenProfileImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 17.5,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: colors.lightGrey,
+  },
+  modalProfileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: colors.lightGrey,
+  },
+  modalUserInfoText: {
+    letterSpacing: 0.3,
+    color: "#666",
+    textAlign: "center",
   },
 });
 

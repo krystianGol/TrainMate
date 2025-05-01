@@ -31,7 +31,6 @@ const ProfileImage = (props) => {
     try {
       const result = await lunchImagePicker();
       const tempUri = result.uri;
-      console.log(tempUri);
       if (!tempUri) return;
 
       setIsLoading(true);
