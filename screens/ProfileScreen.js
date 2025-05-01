@@ -1,11 +1,12 @@
-import { ScrollView, ActivityIndicator, Alert, View } from "react-native";
+import { ScrollView, ActivityIndicator, Alert, View, TouchableWithoutFeedback } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useReducer, useCallback, useEffect } from "react";
+import React, { useState, useReducer, useCallback, useEffect, useLayoutEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import PageContainer from "../components/PageContainer";
 import Input from "../components/Input";
@@ -19,8 +20,9 @@ import colors from "../constans/colors";
 import { updateLoggedInUserData } from "../store/authSlice";
 import { logoutUser } from "../utils/actions/authActions";
 import ProfileImage from "../components/ProfileImage";
+import { HeaderTitle } from "@react-navigation/elements";
 
-const ProfileScreen = () => {
+const ProfileScreen = (props) => {
   const userData = useSelector((state) => state.auth.userData);
   const dispatch = useDispatch();
 
@@ -113,10 +115,18 @@ const ProfileScreen = () => {
     }
   }, [errorMessage]);
 
+
   return (
     <PageContainer>
       <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <TouchableWithoutFeedback onPress={() => dispatch(logoutUser())}>
+        <View style={{ width: '100%', flex: 1, justifyContent: 'start', alignItems: 'flex-end'}}>
+        <MaterialIcons style={{ color: colors.red, marginRight: 4 }} name="logout" size={24} color="black" />
+        </View>
+        </TouchableWithoutFeedback>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ProfileImage 
           userId={userData.userId}
@@ -231,7 +241,6 @@ const ProfileScreen = () => {
           />
         )
       )}
-      <SubmitButton title="Logout" onPress={() => dispatch(logoutUser())} />
       </ScrollView>
       </SafeAreaView>
     </PageContainer>

@@ -18,6 +18,7 @@ import React, {
   useEffect,
   useRef,
   useLayoutEffect,
+  useMemo,
 } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -50,32 +51,25 @@ const ChatScreen = (props) => {
 
   const flatList = useRef();
 
-  if (replayingTo) {
-    console.log(replayingTo.key);
-  }
-
   const storedUsers = useSelector((state) => state.users.storedUsers);
   const storedChats = useSelector((state) => state.chats.chatsData);
   const userData = useSelector((state) => state.auth.userData);
 
   const messagesData = useSelector((state) => {
     if (!chatId) return [];
-
+  
     const chatMessagesData = state.messages.messagesData[chatId];
-
     if (!chatMessagesData) return [];
+  
+    return Object.entries(chatMessagesData).map(([key, message]) => ({
+      key,
+      ...message,
+    }));
+  }, [chatId]); 
 
-    const messageList = [];
-
-    for (const key in chatMessagesData) {
-      const message = chatMessagesData[key];
-      messageList.push({
-        key,
-        ...message,
-      });
-    }
-    return messageList;
-  });
+  const memoizedMessagesData = useMemo(() => {
+    return messagesData;
+  }, [messagesData]);
 
   const chatData =
     (chatId && storedChats[chatId]) || props.route?.params?.newChatData;
@@ -141,7 +135,7 @@ const ChatScreen = (props) => {
       if (!uploadUri) {
         throw new Error("Could not upload image");
       }
-      console.log(replayingTo);
+
       await sendImageMessage(
         chatId,
         userData.userId,
@@ -163,7 +157,7 @@ const ChatScreen = (props) => {
   const takePhoto = useCallback(async () => {
     try {
       const result = await openCamera();
-      console.log(result);
+      
       if (!result || result.cancelled) return;
 
       const tempUri = result.uri;

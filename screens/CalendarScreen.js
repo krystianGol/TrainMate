@@ -8,7 +8,7 @@ import {
   Button,
   FlatList
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Modal from "react-native-modal";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -30,15 +30,33 @@ const CalendarScreen = (props) => {
 
   const dispatch = useDispatch();
   const events = useSelector(state => state.calendar.storedEvents[selectedDay] || [])
+  const storedEvents = useSelector(state => state.calendar.storedEvents);
   const userData = useSelector(state => state.auth.userData);
 
-  const markedDates = {
-    [selectedDay]: {
+ 
+const markedDates = useMemo(() => {
+  const marks = {};
+
+  Object.keys(storedEvents).forEach(date => {
+    if (storedEvents[date]?.length > 0) {
+      marks[date] = {
+        marked: true,
+        dotColor: '#007AFF',
+      };
+    }
+  });
+
+  if (selectedDay) {
+    marks[selectedDay] = {
+      ...(marks[selectedDay] || {}),
       selected: true,
       selectedColor: '#007AFF',
       selectedTextColor: 'white',
-    },
-  };
+    };
+  }
+
+  return marks;
+}, [storedEvents, selectedDay]);
 
   const addNewEvent = (day) => {
     setSelectedDay(day.dateString);

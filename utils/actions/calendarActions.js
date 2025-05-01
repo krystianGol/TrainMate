@@ -36,7 +36,7 @@ export const loadEvents = async (userId) => {
 
     return formattedEvents;
   } catch (error) {
-    console.log("Błąd wczytywania eventów:", error);
+    console.log(error);
     return {};
   }
 };
