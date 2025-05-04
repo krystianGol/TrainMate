@@ -55,17 +55,20 @@ const ChatScreen = (props) => {
   const storedChats = useSelector((state) => state.chats.chatsData);
   const userData = useSelector((state) => state.auth.userData);
 
-  const messagesData = useSelector((state) => {
-    if (!chatId) return [];
-  
-    const chatMessagesData = state.messages.messagesData[chatId];
-    if (!chatMessagesData) return [];
-  
-    return Object.entries(chatMessagesData).map(([key, message]) => ({
-      key,
-      ...message,
-    }));
-  }, [chatId]); 
+  const messagesData = useSelector(
+    (state) => {
+      if (!chatId) return [];
+
+      const chatMessagesData = state.messages.messagesData[chatId];
+      if (!chatMessagesData) return [];
+
+      return Object.entries(chatMessagesData).map(([key, message]) => ({
+        key,
+        ...message,
+      }));
+    },
+    [chatId]
+  );
 
   const memoizedMessagesData = useMemo(() => {
     return messagesData;
@@ -157,7 +160,7 @@ const ChatScreen = (props) => {
   const takePhoto = useCallback(async () => {
     try {
       const result = await openCamera();
-      
+
       if (!result || result.cancelled) return;
 
       const tempUri = result.uri;
@@ -334,13 +337,19 @@ const ChatScreen = (props) => {
                     {userDataToChatWith.fights} fights •{" "}
                     {userDataToChatWith.weight}kg
                   </Text>
-
+                  <View
+                    style={{
+                      borderTopWidth: 1,
+                      borderTopColor: "#ccc",
+                      marginVertical: 20,// odstęp od elementów powyżej
+                      width: "100%",
+                    }}
+                  />
                   <TouchableOpacity
                     onPress={() => setUserInfoModalVisible(false)}
-                    style={{ marginTop: 20 }}
                   >
                     <Text style={{ color: "#007AFF", fontWeight: "bold" }}>
-                      Close
+                      Zamknij
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -6,17 +6,24 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  FlatList
+  FlatList,
+  KeyboardAvoidingView,
+  ScrollView,
+  Keyboard,
 } from "react-native";
 import React, { useEffect, useState, useMemo } from "react";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Modal from "react-native-modal";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "react-native-modal-datetime-picker";
 import { Platform } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { addEvent } from "../store/calendarSlice";
-import { saveEvent,loadEvents, removeEventFromDatabase } from "../utils/actions/calendarActions";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import {
+  saveEvent,
+  loadEvents,
+  removeEventFromDatabase,
+} from "../utils/actions/calendarActions";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { setEvents, removeEvent } from "../store/calendarSlice";
 import EventItem from "../components/EventItem";
 import PageContainer from "../components/PageContainer";
@@ -29,41 +36,41 @@ const CalendarScreen = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const dispatch = useDispatch();
-  const events = useSelector(state => state.calendar.storedEvents[selectedDay] || [])
-  const storedEvents = useSelector(state => state.calendar.storedEvents);
-  const userData = useSelector(state => state.auth.userData);
+  const events = useSelector(
+    (state) => state.calendar.storedEvents[selectedDay] || []
+  );
+  const storedEvents = useSelector((state) => state.calendar.storedEvents);
+  const userData = useSelector((state) => state.auth.userData);
 
- 
-const markedDates = useMemo(() => {
-  const marks = {};
+  const markedDates = useMemo(() => {
+    const marks = {};
 
-  Object.keys(storedEvents).forEach(date => {
-    if (storedEvents[date]?.length > 0) {
-      marks[date] = {
-        marked: true,
-        dotColor: '#007AFF',
+    Object.keys(storedEvents).forEach((date) => {
+      if (storedEvents[date]?.length > 0) {
+        marks[date] = {
+          marked: true,
+          dotColor: "#007AFF",
+        };
+      }
+    });
+
+    if (selectedDay) {
+      marks[selectedDay] = {
+        ...(marks[selectedDay] || {}),
+        selected: true,
+        selectedColor: "#007AFF",
+        selectedTextColor: "white",
       };
     }
-  });
 
-  if (selectedDay) {
-    marks[selectedDay] = {
-      ...(marks[selectedDay] || {}),
-      selected: true,
-      selectedColor: '#007AFF',
-      selectedTextColor: 'white',
-    };
-  }
-
-  return marks;
-}, [storedEvents, selectedDay]);
+    return marks;
+  }, [storedEvents, selectedDay]);
 
   const addNewEvent = (day) => {
     setSelectedDay(day.dateString);
   };
 
   const handleSaveEvent = async () => {
-
     const eventData = {
       date: selectedDay,
       title: eventTitle,
@@ -71,13 +78,11 @@ const markedDates = useMemo(() => {
         hour: "2-digit",
         minute: "2-digit",
       }),
-    }
+    };
 
-    dispatch(
-      addEvent(eventData)
-    );
+    dispatch(addEvent(eventData));
 
-    await saveEvent(userData.userId, eventData)
+    await saveEvent(userData.userId, eventData);
 
     setEventTitle("");
     setModalVisible(false);
@@ -94,12 +99,12 @@ const markedDates = useMemo(() => {
   useEffect(() => {
     const fetchEvents = async () => {
       if (!userData?.userId) return;
-      
+
       const loadedEvents = await loadEvents(userData.userId);
-      
+
       dispatch(setEvents(loadedEvents));
     };
-  
+
     fetchEvents();
   }, [userData]);
 
@@ -107,67 +112,89 @@ const markedDates = useMemo(() => {
     props.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => setModalVisible(true)} title="test">
-          <AntDesign style={styles.addEventIcon}name="pluscircleo" size={24} color="black" />
+          <AntDesign
+            style={styles.addEventIcon}
+            name="pluscircleo"
+            size={24}
+            color="black"
+          />
         </TouchableOpacity>
       ),
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
-        <Calendar 
-          onDayPress={addNewEvent} 
+        <Calendar
+          onDayPress={addNewEvent}
           markedDates={markedDates}
-          />
+          minDate={new Date().toISOString().split("T")[0]}
+        />
         <Modal
           isVisible={isModalVisible}
           onBackdropPress={() => setModalVisible(false)}
           style={styles.modal}
+          avoidKeyboard={true}
         >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add event</Text>
-            <Text style={styles.modalDate}>{selectedDay}</Text>
-
-            <TextInput
-              placeholder="Event title"
-              style={styles.input}
-              value={eventTitle}
-              onChangeText={setEventTitle}
-            />
-
-            <TouchableOpacity
-              style={styles.timeButton}
-              onPress={() => setShowTimePicker(true)}
+          <View style={styles.modalContentContainer}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
             >
-              <Text style={styles.timeButtonText}>
-                Wybierz godzinę:{" "}
-                {eventTime.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </Text>
-            </TouchableOpacity>
+              <ScrollView
+                contentContainerStyle={styles.modalContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                <Text style={styles.modalTitle}>Add event</Text>
+                <Text style={styles.modalDate}>{selectedDay}</Text>
 
-            {showTimePicker && (
-              <DateTimePicker
-                style={styles.dateTimePicker}
-                value={eventTime}
-                mode="time"
-                display="default"
-                onChange={handleTimeChange}
-              />
-            )}
+                <TextInput
+                  placeholder="Event title"
+                  style={styles.input}
+                  value={eventTitle}
+                  onChangeText={setEventTitle}
+                />
 
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSaveEvent}
-            >
-              <Text style={styles.saveButtonText}>Save</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.timeButton}
+                  onPress={() => setShowTimePicker(true)}
+                >
+                  <Text style={styles.timeButtonText}>
+                    Pick time event:{" "}
+                    {eventTime.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Text>
+                </TouchableOpacity>
+
+                <DateTimePicker
+                  isVisible={showTimePicker}
+                  mode="time"
+                  date={eventTime}
+                  onConfirm={(date) => {
+                    setEventTime(date);
+                    setShowTimePicker(false);
+                  }}
+                  onCancel={() => setShowTimePicker(false)}
+                  is24Hour={true}
+                  confirmTextIOS='Wybierz'
+                  cancelTextIOS='Anuluj'
+                  pickerContainerStyleIOS={styles.pickerStyle}
+                />
+
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={handleSaveEvent}
+                >
+                  <Text style={styles.saveButtonText}>Save</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
         </Modal>
-        <FlatList 
+
+        <FlatList
           data={events}
           renderItem={(itemData) => {
             const eventData = itemData.item;
@@ -176,15 +203,15 @@ const markedDates = useMemo(() => {
             const eventId = eventData.id;
 
             return (
-              <EventItem 
+              <EventItem
                 title={eventTitle}
                 time={eventTime}
                 onDelete={async () => {
-                  dispatch(removeEvent({ date: selectedDay, id: eventId }))
+                  dispatch(removeEvent({ date: selectedDay, id: eventId }));
                   await removeEventFromDatabase(userData.userId, eventId);
                 }}
               />
-            )
+            );
           }}
         />
       </PageContainer>
@@ -197,12 +224,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     margin: 0,
   },
-  modalContent: {
+  modalContentContainer: {
     backgroundColor: "white",
-    padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    elevation: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    maxHeight: "70%",
   },
   modalTitle: {
     fontSize: 20,
@@ -249,6 +278,10 @@ const styles = StyleSheet.create({
   },
   addEventIcon: {
     marginRight: 10,
+  },
+  pickerStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
