@@ -37,10 +37,13 @@ const NewChatScreen = (props) => {
     props.navigation.setOptions({
       headerLeft: () => (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-          <Item title="Close" onPress={() => props.navigation.goBack()} />
+          <Item 
+            title="Wróć" 
+            onPress={() => props.navigation.goBack()} 
+            color={colors.primaryColor} />
         </HeaderButtons>
       ),
-      headerTitle: "New Chat",
+      headerTitle: "Nowy Czat",
     });
   }, []);
 
@@ -138,7 +141,7 @@ const NewChatScreen = (props) => {
         />
         <TextInput
           style={styles.textBox}
-          placeholder="Search for user"
+          placeholder="Wyszukaj użytkownika"
           onChangeText={(text) => setSearchTerm(text)}
         />
       </View>
@@ -191,12 +194,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
     marginVertical: 8,
-    borderRadius: 2,
-    backgroundColor: colors.nearlyWhite,
+    borderRadius: 5,
+    backgroundColor: colors.inputContainerColor,
     alignItems: "center",
   },
   textBox: {
-    color: colors.textColor,
+    color: "white",
     flex: 1,
     fontFamily: "regular",
     letterSpacing: 0.3,

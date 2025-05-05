@@ -59,7 +59,7 @@ function TabNavigator() {
           },
           headerTitleStyle: {
             color: "white",
-            fontSize: 30, 
+            fontSize: 28,
             fontWeight: "bold",
           },
           tabBarIcon: ({ color }) => (
@@ -97,13 +97,26 @@ const StackNavigator = () => {
           name="ChatScreen"
           component={ChatScreen}
           options={{
-            headerBackTitle: "Back",
+            headerBackTitle: "Wróć",
           }}
         />
       </Stack.Group>
 
       <Stack.Group screenOptions={{ presentation: "containedModal" }}>
-        <Stack.Screen name="NewChat" component={NewChatScreen} />
+        <Stack.Screen
+          name="NewChat"
+          component={NewChatScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: colors.backgroundColor,
+            },
+            headerTitleStyle: {
+              color: "white",
+              fontSize: 20,
+              fontWeight: "bold",
+            },
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
