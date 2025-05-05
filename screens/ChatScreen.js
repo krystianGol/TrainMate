@@ -91,7 +91,7 @@ const ChatScreen = (props) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              flexShrink: 1,
+              flexShrink: 1, 
             }}
           >
             <Image
@@ -102,7 +102,7 @@ const ChatScreen = (props) => {
               }
               style={styles.chatScreenProfileImage}
             />
-            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>
               {getChatTitleFromName()}
             </Text>
           </View>
@@ -301,7 +301,7 @@ const ChatScreen = (props) => {
               >
                 <View
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: colors.inputContainerColor,
                     padding: 20,
                     borderRadius: 15,
                     alignItems: "center",
@@ -322,6 +322,8 @@ const ChatScreen = (props) => {
                       fontSize: 18,
                       fontWeight: "bold",
                       textAlign: "center",
+                      color: 'white',
+                      marginBottom: 10,
                     }}
                   >
                     {getChatTitleFromName()}
@@ -333,22 +335,22 @@ const ChatScreen = (props) => {
                     {userDataToChatWith.clubName}
                   </Text>
                   <Text style={styles.modalUserInfoText}>
-                    Boxing: {userDataToChatWith.experience} yrs •{" "}
-                    {userDataToChatWith.fights} fights •{" "}
+                    Boks: {userDataToChatWith.experience} lata •{" "}
+                    {userDataToChatWith.fights} walk •{" "}
                     {userDataToChatWith.weight}kg
                   </Text>
                   <View
                     style={{
                       borderTopWidth: 1,
                       borderTopColor: "#ccc",
-                      marginVertical: 20,// odstęp od elementów powyżej
+                      marginVertical: 20,
                       width: "100%",
                     }}
                   />
                   <TouchableOpacity
                     onPress={() => setUserInfoModalVisible(false)}
                   >
-                    <Text style={{ color: "#007AFF", fontWeight: "bold" }}>
+                    <Text style={{ color: colors.primaryColor, fontWeight: "bold" }}>
                       Zamknij
                     </Text>
                   </TouchableOpacity>
@@ -368,7 +370,7 @@ const ChatScreen = (props) => {
 
         <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.mediaButton} onPress={uploadImage}>
-            <AntDesign name="plus" size={24} color="black" />
+            <AntDesign name="plus" size={24} color={colors.primaryColor} />
           </TouchableOpacity>
           <TextInput
             style={styles.textBox}
@@ -378,12 +380,12 @@ const ChatScreen = (props) => {
           />
           {messageText === "" && (
             <TouchableOpacity style={styles.mediaButton} onPress={takePhoto}>
-              <Feather name="camera" size={24} color="black" />
+              <Feather name="camera" size={24} color={colors.primaryColor} />
             </TouchableOpacity>
           )}
           {messageText !== "" && (
             <TouchableOpacity style={styles.mediaButton} onPress={sendMessage}>
-              <Feather name="send" size={24} color="black" />
+              <Feather name="send" size={24} color={colors.primaryColor} />
             </TouchableOpacity>
           )}
         </View>
@@ -396,6 +398,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+    backgroundColor: "#131314",
   },
   inputContainer: {
     flexDirection: "row",
@@ -406,10 +409,12 @@ const styles = StyleSheet.create({
   },
   textBox: {
     flex: 1,
+    backgroundColor: "#1d1c1c",
     borderWidth: 1,
     borderRadius: 50,
     marginHorizontal: 10,
     paddingHorizontal: 12,
+    color: "white",
   },
   mediaButton: {
     alignSelf: "center",
@@ -432,7 +437,7 @@ const styles = StyleSheet.create({
   },
   modalUserInfoText: {
     letterSpacing: 0.3,
-    color: "#666",
+    color: "#929292",
     textAlign: "center",
   },
 });

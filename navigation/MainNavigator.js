@@ -106,6 +106,10 @@ const StackNavigator = () => {
           component={ChatScreen}
           options={{
             headerBackTitle: "Wróć",
+            headerStyle: {
+              backgroundColor: colors.backgroundColor,
+            },
+            headerTintColor: colors.primaryColor,
           }}
         />
       </Stack.Group>

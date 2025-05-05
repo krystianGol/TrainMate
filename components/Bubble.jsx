@@ -26,8 +26,8 @@ const MenuItem = (props) => {
   return (
     <MenuOption onSelect={props.onSelect}>
       <View style={styles.menuItemContainer}>
-        <Text style={styles.menuText}>{props.text}</Text>
-        <Icon name={props.icon} size={18} />
+        <Text style={styles.menuText} >{props.text}</Text>
+        <Icon name={props.icon} size={18} color={colors.primaryColor}/>
       </View>
     </MenuOption>
   );
@@ -59,14 +59,17 @@ const Bubble = (props) => {
       bubbleStyle.marginTop = 10;
       break;
     case "myMessage":
+      textStyle.color = "black";
       wrapperStyle.justifyContent = "flex-end";
-      bubbleStyle.backgroundColor = "#E7FED6";
+      bubbleStyle.backgroundColor = colors.primaryColor;
       bubbleStyle.maxWidth = "90%";
       Container = TouchableWithoutFeedback;
       break;
     case "theirMessage":
       wrapperStyle.justifyContent = "flex-start";
       bubbleStyle.maxWidth = "90%";
+      bubbleStyle.backgroundColor = "#1c1d1d";
+      textStyle.color = "white";
       Container = TouchableWithoutFeedback;
       break;
     case "reply":
@@ -74,7 +77,7 @@ const Bubble = (props) => {
       bubbleStyle.paddingVertical = 3;
       bubbleStyle.paddingHorizontal = 6;
       bubbleStyle.borderLeftWidth = 4;
-      bubbleStyle.borderLeftColor = colors.primaryColor;
+      bubbleStyle.borderLeftColor = "red";
       bubbleStyle.marginBottom = 5;
       textStyle.fontSize = 12;
       textStyle.color = "gray";
@@ -103,8 +106,12 @@ const Bubble = (props) => {
           {replayingToUser && (
             <View style={styles.replyPreview}>
               <Text style={styles.replyPreviewText} numberOfLines={2}>
-              {props.replayingTo?.text && <Text>{props.replayingTo.text}</Text>}
-              {!props.replayingTo?.text && props.replayingTo?.imageUrl && <Text>📷 Sent a photo</Text>}
+                {props.replayingTo?.text && (
+                  <Text>{props.replayingTo.text}</Text>
+                )}
+                {!props.replayingTo?.text && props.replayingTo?.imageUrl && (
+                  <Text>📷 Sent a photo</Text>
+                )}
               </Text>
             </View>
           )}
@@ -116,16 +123,26 @@ const Bubble = (props) => {
           )}
           <Menu name={id.current} ref={menuRef}>
             <MenuTrigger />
-            <MenuOptions>
+            <MenuOptions
+              customStyles={{
+                optionsContainer: {
+                  backgroundColor: "#1d1c1c",
+                  borderRadius: 10,
+                },
+              }}
+            >
               <MenuItem
                 text="Copy"
                 icon="copy"
+                textStyle={{ color: colors.primaryColor }}
                 onSelect={() => copyToClickboard(text)}
               />
               <MenuItem
                 text="Replay"
                 iconPack={Entypo}
                 icon="arrow-with-circle-left"
+                textStyle={{ color: colors.primaryColor }}
+                iconStyle={{ color: colors.primaryColor }}
                 onSelect={props.setReplay}
               />
             </MenuOptions>
@@ -140,14 +157,13 @@ const styles = StyleSheet.create({
   wrapperStyle: {
     flexDirection: "row",
     justifyContent: "center",
+    marginTop: 10,
   },
   container: {
     backgroundColor: "white",
     borderRadius: 6,
-    padding: 5,
+    padding: 8,
     marginBottom: 10,
-    borderColor: "#E2DACC",
-    borderWidth: 1,
   },
   text: {
     fontFamily: "regular",
@@ -162,6 +178,7 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
     letterSpacing: 0.3,
     fontSize: 16,
+    color: colors.primaryColor,
   },
   replyContainer: {
     alignSelf: "flex-start",
@@ -170,7 +187,7 @@ const styles = StyleSheet.create({
   replyPreview: {
     backgroundColor: "#F2F2F2",
     borderLeftWidth: 4,
-    borderLeftColor: colors.primaryColor,
+    borderLeftColor: "#b0912f",
     borderRadius: 6,
     paddingVertical: 4,
     paddingHorizontal: 6,
