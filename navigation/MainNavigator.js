@@ -25,6 +25,12 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="ChatList"
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: colors.backgroundColor,
+        },
+        tabBarActiveTintColor: colors.primaryColor,
+      }}
     >
       <Tab.Screen
         name="Calendar"
@@ -33,7 +39,11 @@ function TabNavigator() {
           title: "Calendar",
           tabBarLabel: "Calendar",
           tabBarIcon: () => (
-            <FontAwesome name="calendar-check-o" size={24} color="black" />
+            <FontAwesome
+              name="calendar-check-o"
+              size={24}
+              color={colors.primaryColor}
+            />
           ),
         }}
       />
@@ -44,7 +54,11 @@ function TabNavigator() {
           title: "Chats",
           tabBarLabel: "Chats",
           tabBarIcon: () => (
-            <Ionicons name="chatbubbles-outline" size={24} color="black" />
+            <Ionicons
+              name="chatbubbles-outline"
+              size={24}
+              color={colors.primaryColor}
+            />
           ),
         }}
       />
@@ -55,7 +69,7 @@ function TabNavigator() {
           headerShown: false,
           tabBarLabel: "Profile",
           tabBarIcon: () => (
-            <FontAwesome name="user-o" size={24} color="black" />
+            <FontAwesome name="user-o" size={24} color={colors.primaryColor} />
           ),
         }}
       />
@@ -89,7 +103,6 @@ const StackNavigator = () => {
 };
 
 const MainNavigator = (props) => {
-
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
   const storedUsers = useSelector((state) => state.users.storedUsers);
@@ -111,7 +124,7 @@ const MainNavigator = (props) => {
         const chatsData = {};
         let chatsCounter = 0;
 
-        for (let i=0; i<chatIds.length; i++) {
+        for (let i = 0; i < chatIds.length; i++) {
           const chatId = chatIds[i];
           const chatRef = child(db, `chats/${chatId}`);
           refs.push(chatRef);
@@ -121,47 +134,46 @@ const MainNavigator = (props) => {
             const data = chatSnapshot.val();
             if (data) {
               data.key = chatSnapshot.key;
-              
-              data.users.forEach(userId => {
+
+              data.users.forEach((userId) => {
                 if (storedUsers[userId]) return;
 
                 const userRef = child(db, `users/${userId}`);
-                get(userRef)
-                  .then(userSnapshot => {
-                    const userSnapshotData = userSnapshot.val();
-                    dispatch(setStoredUsers({ newUsers: { userSnapshotData } }))
-                  })
-                  refs.push(userRef);
-              })
+                get(userRef).then((userSnapshot) => {
+                  const userSnapshotData = userSnapshot.val();
+                  dispatch(setStoredUsers({ newUsers: { userSnapshotData } }));
+                });
+                refs.push(userRef);
+              });
               chatsData[chatSnapshot.key] = data;
             }
             if (chatsCounter >= chatIds.length) {
               dispatch(setChatsData({ chatsData }));
               setIsLoading(false);
             }
-          })
+          });
           const messagesRef = child(db, `messages/${chatId}`);
           refs.push(messagesRef);
 
           onValue(messagesRef, (messagesSnapshot) => {
             const messagesData = messagesSnapshot.val();
-            dispatch(setChatMessages({chatId, messagesData}))
-          })
+            dispatch(setChatMessages({ chatId, messagesData }));
+          });
           if (chatsCounter === 0) {
             setIsLoading(false);
           }
         }
-      })
+      });
     } catch (error) {
       console.log(error);
-    } 
-    return () => {
-      refs.forEach(ref => off(ref));
     }
+    return () => {
+      refs.forEach((ref) => off(ref));
+    };
   }, []);
 
   if (isLoading) {
-    <View style={ styles.indicatorContainer }>
+    <View style={styles.indicatorContainer}>
       <ActivityIndicator
         size={"large"}
         color={colors.primaryColor}
@@ -170,16 +182,14 @@ const MainNavigator = (props) => {
     </View>;
   }
 
-  return (
-  <StackNavigator />
-);
+  return <StackNavigator />;
 };
 const styles = StyleSheet.create({
   indicatorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default MainNavigator;
