@@ -126,7 +126,7 @@ const ProfileScreen = (props) => {
         <StatusBar style="light" />
         <TouchableWithoutFeedback onPress={() => dispatch(logoutUser())}>
         <View style={{ width: '100%', flex: 1, justifyContent: 'start', alignItems: 'flex-end'}}>
-        <MaterialIcons style={{ color: colors.red, marginRight: 4 }} name="logout" size={24} color="black" />
+        <MaterialIcons style={{ color: colors.red, marginRight: 5, marginTop: 5 }} name="logout" size={28} color="black" />
         </View>
         </TouchableWithoutFeedback>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>

@@ -10,8 +10,8 @@ const DataItem = (props) => {
       <View style={styles.dataContainer}>
         <ProfileImage
           uri={props.profilePicture}
-          height={50}
-          width={50}
+          height={65}
+          width={65}
           newChat={true}
         />
         <View style={styles.textContainer}>
@@ -50,23 +50,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.extraLightGrey,
     borderRadius: 2,
+    marginBottom: 5,
   },
   textContainer: {
     marginLeft: 12,
     flex: 1,
   },
   nameText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#000",
+    fontSize: 19,
+    fontWeight: "bold",
+    color: "white",
     letterSpacing: 0.3,
   },
   subText: {
-    fontSize: 14,
-    color: "#555",
+    fontSize: 15,
+    color: "grey",
     marginTop: 2,
     letterSpacing: 0.3,
   },

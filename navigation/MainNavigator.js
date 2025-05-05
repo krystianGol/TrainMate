@@ -28,6 +28,7 @@ function TabNavigator() {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: colors.backgroundColor,
+          borderTopWidth: 0,
         },
         tabBarActiveTintColor: colors.primaryColor,
       }}
@@ -51,15 +52,21 @@ function TabNavigator() {
         name="ChatList"
         component={ChatListScreen}
         options={{
-          title: "Chats",
+          title: "Czaty",
           tabBarLabel: "Chats",
-          tabBarIcon: () => (
-            <Ionicons
-              name="chatbubbles-outline"
-              size={24}
-              color={colors.primaryColor}
-            />
+          headerStyle: {
+            backgroundColor: colors.backgroundColor,
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 30, 
+            fontWeight: "bold",
+          },
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="chatbubbles-outline" size={24} color={color} />
           ),
+          tabBarActiveTintColor: colors.primaryColor,
+          tabBarInactiveTintColor: "gray",
         }}
       />
       <Tab.Screen

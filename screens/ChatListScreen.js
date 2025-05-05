@@ -7,6 +7,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
 import DataItem from '../components/DataItem';
 
+import colors from '../constans/colors';
+
 const ChatListScreen = (props) => {
 
     const selectedUser = props.route?.params?.selectedUserId;
@@ -22,7 +24,6 @@ const ChatListScreen = (props) => {
       });
     });
 
-
     useEffect(() => {
       props.navigation.setOptions({
         headerRight: () => (
@@ -31,7 +32,7 @@ const ChatListScreen = (props) => {
               iconPack={Entypo}
               iconName='new-message'
               iconSize={24}
-              color='black'
+              color={colors.primaryColor}
               onPress={() => props.navigation.navigate("NewChat")}
             />
           </HeaderButtons>
@@ -58,6 +59,7 @@ const ChatListScreen = (props) => {
 
   return (
     <FlatList 
+      style={styles.flatListStyle}
       data={userChats}
       renderItem={(itemData) => {
         const otherUsersId = itemData.item.users.find(uid => uid !== userData.userId);
@@ -81,5 +83,11 @@ const ChatListScreen = (props) => {
     />
   )
 }
+
+const styles = StyleSheet.create({
+  flatListStyle: {
+    backgroundColor: colors.backgroundColor,
+  }
+})
 
 export default ChatListScreen

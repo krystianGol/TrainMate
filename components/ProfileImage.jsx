@@ -70,7 +70,7 @@ const ProfileImage = (props) => {
             />
             {!props.newChat && (
               <View style={styles.iconContainer}>
-                <Feather name="edit-2" size={18} color="black" />
+                <Feather name="edit-2" size={18} color={colors.lightGrey} />
               </View>
             )}
           </>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 50,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.lightGrey,
   },
   iconContainer: {
