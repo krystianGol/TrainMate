@@ -5,7 +5,7 @@ export default {
     nearlyWhite: '#F4F8F7',
     grey: '#7f8c8d',
     textColor: '#fefeff',
-    primaryColor: '#77aaff',
+    primaryColor: '#ffbf00',
     red: '#e74c3c',
     beige: '#FEF5C3',
     backgroundColor: '#090909',

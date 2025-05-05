@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert } from "react-native";
+import { ActivityIndicator, Alert, Image, View, Text, StyleSheet } from "react-native";
 import React, { useCallback, useReducer, useEffect, useState } from "react";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -10,6 +10,7 @@ import { validateInput } from "../utils/actions/formActions";
 import { reducer } from "../utils/reducers/formReducer";
 import { signIn } from "../utils/actions/authActions";
 import colors from "../constans/colors";
+import logo from "../constans/images/logo2.png";
 
 const testMode = true;
 
@@ -65,15 +66,16 @@ const SignIn = () => {
   }, [dispatch, state]);
 
   return (
-    <>
+    <View style={{ backgroundColor: colors.backgroundColor }}>
+      <Image style={styles.logoImage} source={logo} />
+      <Text style={styles.signInLabel}>Zaloguj się</Text>
       <Input
         id="email"
         iconPack={Fontisto}
         iconName="email"
         size={24}
         color="black"
-        placeholder="Enter your email"
-        label="Email"
+        placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
@@ -87,8 +89,7 @@ const SignIn = () => {
         iconName="lock"
         size={24}
         color="black"
-        placeholder="Enter your password"
-        label="Password"
+        placeholder="Hasło"
         secureTextEntry={true}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
@@ -100,13 +101,30 @@ const SignIn = () => {
         <ActivityIndicator size="small" color={colors.primaryColor} style={{marginTop: 10}}/>
       ) : (
         <SubmitButton
-          title="Sign In"
+          title="Logowanie"
           onPress={authHandler}
           disabled={!state.formIsValid}
         />
       )}
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  logoImage: {
+    width: 280,
+    height: 180,
+    alignSelf: "center",
+    marginBottom: 0,
+  },
+  signInLabel: {
+    color: colors.textColor,
+    alignSelf: "center",
+    marginTop: 20,
+    marginBottom: 35,
+    fontSize: 45,
+    fontWeight: "bold",
+  },
+});
 
 export default SignIn;

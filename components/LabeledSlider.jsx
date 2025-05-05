@@ -11,7 +11,7 @@ const LabeledSlider = ({ label, min, max, step = 1, value, onChange, subLabel })
         {label}: {value} {subLabel}
       </Text>
       <Slider
-        style={{ width: '100%', height: 40 }}
+        style={{ width: '100%', height: 40, marginLeft: 2}}
         minimumValue={min}
         maximumValue={max}
         step={step}
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
       marginBottom: 8,
       fontFamily: 'bold',
       color: colors.textColor,
+      marginLeft: 5,
     },
   });
 

@@ -99,7 +99,7 @@ const SignUp = () => {
   return (
     <View style={{ backgroundColor: colors.backgroundColor }}>
       <Image style={styles.logoImage} source={logo} />
-      <Text style={styles.signUpLabel}>Sign Up</Text>
+      <Text style={styles.signUpLabel}>Zarejestruj się</Text>
       <View style={styles.rowContainer}>
         <Input
           id="firstName"
@@ -226,7 +226,7 @@ const SignUp = () => {
         <ActivityIndicator size="small" color={colors.primaryColor} />
       ) : (
         <SubmitButton
-          title="Sign Up"
+          title="Utwórz konto"
           onPress={authHandler}
           disabled={!state.formIsValid}
         />
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 20,
     marginBottom: 35,
-    fontSize: 55,
+    fontSize: 45,
     fontWeight: "bold",
   },
   rowContainer: {

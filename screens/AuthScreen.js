@@ -33,8 +33,8 @@ const AuthScreen = () => {
               style={styles.linkContainer}
               onPress={() => setSignUpForm((prevValue) => !prevValue)}
             >
-              <Text style={styles.link}>{`Switch to ${
-                singUpForm ? "Sign In" : "Sign Up"
+              <Text style={styles.link}>{`Zmień na ${
+                singUpForm ? "Logowanie" : "Rejestracja"
               }`}</Text>
             </TouchableOpacity>
           </ScrollView>
