@@ -27,6 +27,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { setEvents, removeEvent } from "../store/calendarSlice";
 import EventItem from "../components/EventItem";
 import PageContainer from "../components/PageContainer";
+import colors from "../constans/colors";
 
 const CalendarScreen = (props) => {
   const [selectedDay, setSelectedDay] = useState("");
@@ -49,7 +50,7 @@ const CalendarScreen = (props) => {
       if (storedEvents[date]?.length > 0) {
         marks[date] = {
           marked: true,
-          dotColor: "#007AFF",
+          dotColor: colors.primaryColor,
         };
       }
     });
@@ -58,7 +59,7 @@ const CalendarScreen = (props) => {
       marks[selectedDay] = {
         ...(marks[selectedDay] || {}),
         selected: true,
-        selectedColor: "#007AFF",
+        selectedColor: colors.primaryColor,
         selectedTextColor: "white",
       };
     }
@@ -111,12 +112,12 @@ const CalendarScreen = (props) => {
   useEffect(() => {
     props.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => setModalVisible(true)} title="test">
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <AntDesign
             style={styles.addEventIcon}
             name="pluscircleo"
-            size={24}
-            color="black"
+            size={25}
+            color={colors.primaryColor}
           />
         </TouchableOpacity>
       ),
@@ -127,9 +128,33 @@ const CalendarScreen = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
         <Calendar
+          style={{
+            backgroundColor: colors.backgroundColor,
+            borderRadius: 10,
+            marginTop: 10,
+          }}
           onDayPress={addNewEvent}
           markedDates={markedDates}
           minDate={new Date().toISOString().split("T")[0]}
+          theme={{
+            backgroundColor: colors.backgroundColor,
+            calendarBackground: colors.backgroundColor,
+
+            textSectionTitleColor: colors.primaryColor,
+            dayTextColor: colors.primaryColor,
+            todayTextColor: colors.primaryColor,
+            selectedDayTextColor: "white",
+
+            arrowColor: colors.primaryColor,
+            monthTextColor: colors.primaryColor,
+            textMonthFontWeight: "bold",
+            textDayFontWeight: "500",
+            textDayHeaderFontWeight: "bold",
+
+            textDayFontSize: 16,
+            textMonthFontSize: 18,
+            textDayHeaderFontSize: 14,
+          }}
         />
         <Modal
           isVisible={isModalVisible}
@@ -145,11 +170,12 @@ const CalendarScreen = (props) => {
                 contentContainerStyle={styles.modalContent}
                 keyboardShouldPersistTaps="handled"
               >
-                <Text style={styles.modalTitle}>Add event</Text>
+                <Text style={styles.modalTitle}>Dodaj wydarzenie</Text>
                 <Text style={styles.modalDate}>{selectedDay}</Text>
 
                 <TextInput
-                  placeholder="Event title"
+                  placeholder="Tytuł wydarzenia"
+                  placeholderTextColor="#aba5a5"
                   style={styles.input}
                   value={eventTitle}
                   onChangeText={setEventTitle}
@@ -160,7 +186,7 @@ const CalendarScreen = (props) => {
                   onPress={() => setShowTimePicker(true)}
                 >
                   <Text style={styles.timeButtonText}>
-                    Pick time event:{" "}
+                    Wybierz godzine:{" "}
                     {eventTime.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -178,16 +204,19 @@ const CalendarScreen = (props) => {
                   }}
                   onCancel={() => setShowTimePicker(false)}
                   is24Hour={true}
-                  confirmTextIOS='Wybierz'
-                  cancelTextIOS='Anuluj'
+                  confirmTextIOS="Wybierz"
+                  cancelTextIOS="Anuluj"
                   pickerContainerStyleIOS={styles.pickerStyle}
+                  textColor="white"
+                  buttonTextColorIOS={colors.primaryColor}
+                  isDarkModeEnabled={true}
                 />
 
                 <TouchableOpacity
                   style={styles.saveButton}
                   onPress={handleSaveEvent}
                 >
-                  <Text style={styles.saveButtonText}>Save</Text>
+                  <Text style={styles.saveButtonText}>Zapisz</Text>
                 </TouchableOpacity>
               </ScrollView>
             </KeyboardAvoidingView>
@@ -225,7 +254,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContentContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#2e2a2a",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingBottom: 20,
@@ -234,27 +263,34 @@ const styles = StyleSheet.create({
     maxHeight: "70%",
   },
   modalTitle: {
+    color: "white",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    alignSelf: 'center',
   },
   modalDate: {
     fontSize: 16,
-    color: "#888",
+    color: "#aba5a5",
     marginBottom: 15,
+    alignSelf: 'center'
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "#615858",
     borderRadius: 10,
     padding: 10,
     marginBottom: 15,
+    fontSize: 18,
+    color: "white",
+    fontWeight: "600",
+    letterSpacing: 0.3,
   },
   saveButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: colors.primaryColor,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
+    marginBottom: 25,
   },
   saveButtonText: {
     color: "white",
@@ -262,15 +298,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   timeButton: {
-    backgroundColor: "#eee",
-    padding: 12,
+    backgroundColor: "#615858",
+    padding: 10,
     borderRadius: 10,
     marginBottom: 15,
-    alignItems: "center",
   },
   timeButtonText: {
-    fontSize: 16,
-    color: "#333",
+    fontSize: 18,
+    color: "#aba5a5",
+    fontWeight: "600",
+    letterSpacing: 0.3,
   },
   dateTimePicker: {
     alignSelf: "center",
@@ -280,9 +317,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   pickerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#2e2a2a",
+    padding: 10,
+  },
 });
 
 export default CalendarScreen;

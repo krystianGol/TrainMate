@@ -22,7 +22,7 @@ const EventItem = ({ title, time, onDelete }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#121111',
     padding: 15,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: 'white',
     marginTop: 4,
   },
   time: {
     fontSize: 14,
-    color: '#666',
+    color: 'white',
   },
   deleteButton: {
     backgroundColor: '#ff3b30',

@@ -37,15 +37,21 @@ function TabNavigator() {
         name="Calendar"
         component={CalendarScreen}
         options={{
-          title: "Calendar",
+          title: "Wydarzenia",
           tabBarLabel: "Calendar",
-          tabBarIcon: () => (
-            <FontAwesome
-              name="calendar-check-o"
-              size={24}
-              color={colors.primaryColor}
-            />
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="calendar-check-o" size={24} color={color} />
           ),
+          headerStyle: {
+            backgroundColor: colors.backgroundColor,
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 22,
+            fontWeight: "bold",
+          },
+          tabBarActiveTintColor: colors.primaryColor,
+          tabBarInactiveTintColor: "gray",
         }}
       />
       <Tab.Screen
@@ -75,9 +81,11 @@ function TabNavigator() {
         options={{
           headerShown: false,
           tabBarLabel: "Profile",
-          tabBarIcon: () => (
-            <FontAwesome name="user-o" size={24} color={colors.primaryColor} />
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="user-o" size={24} color={color} />
           ),
+          tabBarActiveTintColor: colors.primaryColor,
+          tabBarInactiveTintColor: "gray",
         }}
       />
     </Tab.Navigator>
