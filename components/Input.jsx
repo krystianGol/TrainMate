@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     color: "#a7a6a6",
   },
   label: {
-    marginVertical: 5,
+    marginBottom: 5,
     fontFamily: "bold",
     letterSpacing: 0.3,
     color: colors.inputTextColor,
