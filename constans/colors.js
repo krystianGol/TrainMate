@@ -4,8 +4,12 @@ export default {
     extraLightGrey: '#ededed',
     nearlyWhite: '#F4F8F7',
     grey: '#7f8c8d',
-    textColor: '#1c1e21',
+    textColor: '#fefeff',
     primaryColor: '#77aaff',
     red: '#e74c3c',
-    beige: '#FEF5C3'
+    beige: '#FEF5C3',
+    backgroundColor: '#090909',
+    inputContainerColor:'#171818',
+    inputTextColor: '#a7a6a6',
+    darkerPrimaryColor: '#998139',
 }

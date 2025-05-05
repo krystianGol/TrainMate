@@ -19,7 +19,7 @@ const AuthScreen = () => {
   const [singUpForm, setSignUpForm] = useState(true);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.backgroundColor }}>
       <PageContainer>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   link: {
-    color: colors.blue,
+    color: "#ffbf00",
     fontFamily: "medium",
     letterSpacing: 0.3,
   },

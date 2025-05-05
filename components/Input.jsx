@@ -4,32 +4,32 @@ import React, { useState } from "react";
 import colors from "../constans/colors";
 
 const Input = (props) => {
-
-  const onChangeText = text => {
+  const onChangeText = (text) => {
     props.onInputChanged(props.id, text);
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{props.label}</Text>
-      <View style={styles.inputContainer}>
+      {props.label && <Text style={styles.label}>{props.label}</Text>}
+      <View style={[styles.inputContainer, props.inputContainerStyle]}>
         <props.iconPack
           style={styles.icon}
           name={props.iconName}
           size={props.size || 20}
           color={props.color}
-        />  
+        />
         <TextInput
           {...props}
           style={styles.textBox}
           placeholder={props.placeholder}
+          placeholderTextColor="#a7a6a6"
           keyboardType={props.keyboardType || "default"}
           onChangeText={onChangeText}
           value={props.value}
         />
       </View>
       {props.errorText && (
-        <View style={styles.errorContainer}>
+        <View style={[styles.errorContainer, props.errorContainerStyle]}>
           <Text style={styles.errorText}>{props.errorText}</Text>
         </View>
       )}
@@ -39,19 +39,21 @@ const Input = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    flexGrow: 1,
+    flexBasis: "48%",
   },
   inputContainer: {
     flexDirection: "row",
     widht: "100%",
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderRadius: 2,
-    backgroundColor: colors.nearlyWhite,
+    borderRadius: 5,
+    backgroundColor: colors.inputContainerColor,
     alignItems: "center",
+    marginBottom: 17,
   },
   textBox: {
-    color: colors.textColor,
+    color: "#a7a6a6",
     flex: 1,
     fontFamily: "regular",
     letterSpacing: 0.3,
@@ -59,16 +61,17 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 15,
-    color: colors.grey,
+    color: "#a7a6a6",
   },
   label: {
     marginVertical: 5,
     fontFamily: "bold",
     letterSpacing: 0.3,
-    color: colors.textColor,
+    color: colors.inputTextColor,
   },
   errorContainer: {
-    marginVertical: 5,
+    marginLeft: 10,
+    marginBottom: 20,
   },
   errorText: {
     color: "red",

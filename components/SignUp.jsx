@@ -1,10 +1,17 @@
-import { Alert, ActivityIndicator } from "react-native";
+import {
+  Alert,
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import React, { useState, useReducer, useCallback, useEffect } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 
 import Input from "./Input";
 import LabeledSlider from "./LabeledSlider";
@@ -13,6 +20,7 @@ import { validateInput } from "../utils/actions/formActions";
 import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authActions";
 import colors from "../constans/colors";
+import logo from "../constans/images/logo2.png";
 
 const initialState = {
   inputValues: {
@@ -42,7 +50,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const inputChangedHandler = useCallback(
     (inputId, inputValue) => {
@@ -89,45 +97,51 @@ const SignUp = () => {
   }, [errorMessage]);
 
   return (
-    <>
-      <Input
-        id="firstName"
-        iconPack={FontAwesome}
-        iconName="user-o"
-        size={24}
-        color="black"
-        placeholder="Enter your first name"
-        label="First Name"
-        onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities["firstName"]}
-        value={state.inputValues["firstName"]}
-      />
+    <View style={{ backgroundColor: colors.backgroundColor }}>
+      <Image style={styles.logoImage} source={logo} />
+      <Text style={styles.signUpLabel}>Sign Up</Text>
+      <View style={styles.rowContainer}>
+        <Input
+          id="firstName"
+          iconPack={FontAwesome}
+          iconName="user-o"
+          size={24}
+          color="black"
+          placeholder="Imie"
+          onInputChanged={inputChangedHandler}
+          errorText={state.inputValidities["firstName"]}
+          value={state.inputValues["firstName"]}
+          inputContainerStyle={{ marginRight: 4, marginLeft: 10 }}
+          errorContainerStyle={{ marginLeft: 10, marginHorizontal: 10 }}
+        />
 
-      <Input
-        id="lastName"
-        iconPack={FontAwesome}
-        iconName="user-o"
-        size={24}
-        color="black"
-        placeholder="Enter your last name"
-        label="Last Name"
-        onInputChanged={inputChangedHandler}
-        errorText={state.inputValidities["lastName"]}
-        value={state.inputValues["lastName"]}
-      />
-
+        <Input
+          id="lastName"
+          iconPack={FontAwesome}
+          iconName="user-o"
+          size={24}
+          color="black"
+          placeholder="Nazwisko"
+          onInputChanged={inputChangedHandler}
+          errorText={state.inputValidities["lastName"]}
+          value={state.inputValues["lastName"]}
+          inputContainerStyle={{ marginLeft: 4, marginRight: 10 }}
+          errorContainerStyle={{ marginLeft: 5 }}
+        />
+      </View>
       <Input
         id="clubName"
         iconPack={FontAwesome}
         iconName="home"
         size={24}
         color="black"
-        placeholder="Enter the name of your boxing club"
-        label="Boxing Club"
+        placeholder="Klub Bokserski"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["clubName"]}
         value={state.inputValues["clubName"]}
+        inputContainerStyle={{ marginHorizontal: 20 }}
+        errorContainerStyle={{ marginLeft: 22 }}
       />
 
       <Input
@@ -136,27 +150,30 @@ const SignUp = () => {
         iconName="location"
         size={24}
         color="black"
-        placeholder="Enter your city"
-        label="City"
+        placeholder="Miasto"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["city"]}
         value={state.inputValues["city"]}
+        inputContainerStyle={{ marginHorizontal: 20 }}
+        errorContainerStyle={{ marginLeft: 22 }}
       />
 
-      <Input
+  <View style={styles.rowContainer}>
+  <Input
         id="email"
         iconPack={Fontisto}
         iconName="email"
         size={24}
         color="black"
-        placeholder="Enter your email"
+        placeholder="Email"
         autoCapitalize="none"
-        label="Email"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["email"]}
         value={state.inputValues["email"]}
+        inputContainerStyle={{ marginRight: 4, marginLeft: 10 }}
+        errorContainerStyle={{ marginLeft: 10, marginHorizontal: 10 }}
       />
 
       <Input
@@ -165,18 +182,22 @@ const SignUp = () => {
         iconName="lock"
         size={24}
         color="black"
-        placeholder="Enter your password"
-        label="Password"
+        placeholder="Hasło"
         secureTextEntry={true}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["password"]}
         value={state.inputValues["password"]}
+        inputContainerStyle={{ marginLeft: 4, marginRight: 10 }}
+        errorContainerStyle={{ marginLeft: 5 }}
       />
+  </View>
+
 
       <LabeledSlider
         id="experience"
-        label="Boxing internship (years)"
+        label="Boxing Experience"
+        subLabel="years"
         min={0}
         max={30}
         value={state.inputValues.experience}
@@ -194,7 +215,8 @@ const SignUp = () => {
 
       <LabeledSlider
         id="weight"
-        label="Weight (kg)"
+        label="Weight"
+        subLabel="kg"
         min={30}
         max={120}
         value={state.inputValues.weight}
@@ -209,8 +231,30 @@ const SignUp = () => {
           disabled={!state.formIsValid}
         />
       )}
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  logoImage: {
+    width: 280,
+    height: 180,
+    alignSelf: "center",
+    marginBottom: 0,
+  },
+  signUpLabel: {
+    color: colors.textColor,
+    alignSelf: "center",
+    marginTop: 20,
+    marginBottom: 35,
+    fontSize: 55,
+    fontWeight: "bold",
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+  },
+});
 
 export default SignUp;

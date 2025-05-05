@@ -5,8 +5,8 @@ import colors from "../constans/colors"
 
 const SubmitButton = (props) => {
 
-  const enabledColor = props.color || 'red';
-  const disabledColor = colors.lightGrey;
+  const enabledColor = props.color || "#ffbf00";
+  const disabledColor = colors.darkerPrimaryColor;
   const bgColor = props.disabled ? disabledColor : enabledColor;
 
   return (
@@ -24,7 +24,7 @@ const SubmitButton = (props) => {
 
 const styles = StyleSheet.create({
     buttonStyle: {
-        backgroundColor: 'red',
+        backgroundColor: colors.primaryColor,
         paddingHorizontal: 30,
         paddingVertical: 10,
         borderRadius: 30,
