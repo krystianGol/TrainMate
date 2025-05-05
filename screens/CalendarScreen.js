@@ -5,14 +5,12 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Button,
   FlatList,
   KeyboardAvoidingView,
   ScrollView,
-  Keyboard,
 } from "react-native";
 import React, { useEffect, useState, useMemo } from "react";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
 import Modal from "react-native-modal";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Platform } from "react-native";
