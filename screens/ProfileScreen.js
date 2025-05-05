@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useReducer, useCallback, useEffect, useLayoutEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { StatusBar } from 'expo-status-bar';
 
 import PageContainer from "../components/PageContainer";
 import Input from "../components/Input";
@@ -122,6 +123,7 @@ const ProfileScreen = (props) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
+        <StatusBar style="light" />
         <TouchableWithoutFeedback onPress={() => dispatch(logoutUser())}>
         <View style={{ width: '100%', flex: 1, justifyContent: 'start', alignItems: 'flex-end'}}>
         <MaterialIcons style={{ color: colors.red, marginRight: 4 }} name="logout" size={24} color="black" />
@@ -142,8 +144,8 @@ const ProfileScreen = (props) => {
         iconName="user-o"
         size={24}
         color="black"
-        placeholder="Enter your first name"
-        label="First Name"
+        placeholder="Wpisz swoje imie"
+        label="Imie"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["firstName"]}
         value={state.inputValues["firstName"]}
@@ -155,8 +157,8 @@ const ProfileScreen = (props) => {
         iconName="user-o"
         size={24}
         color="black"
-        placeholder="Enter your last name"
-        label="Last Name"
+        placeholder="Wpisz swoje nazwisko"
+        label="Nazwisko"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["lastName"]}
         value={state.inputValues["lastName"]}
@@ -168,8 +170,8 @@ const ProfileScreen = (props) => {
         iconName="home"
         size={24}
         color="black"
-        placeholder="Enter the name of your boxing club"
-        label="Boxing Club"
+        placeholder="Wpisz swók klub bokserski"
+        label="Klub Bokserski"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["clubName"]}
@@ -182,8 +184,8 @@ const ProfileScreen = (props) => {
         iconName="location"
         size={24}
         color="black"
-        placeholder="Enter your city"
-        label="City"
+        placeholder="Wpisz swoje miasto"
+        label="Miasto"
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
         errorText={state.inputValidities["city"]}
@@ -196,7 +198,7 @@ const ProfileScreen = (props) => {
         iconName="email"
         size={24}
         color="black"
-        placeholder="Enter your email"
+        placeholder="Wpisz swój email"
         label="Email"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
@@ -206,7 +208,8 @@ const ProfileScreen = (props) => {
 
       <LabeledSlider
         id="experience"
-        label="Boxing internship (years)"
+        label="Staż Bokerski"
+        subLabel="Lat"
         min={0}
         max={30}
         value={state.inputValues.experience}
@@ -215,7 +218,7 @@ const ProfileScreen = (props) => {
 
       <LabeledSlider
         id="fights"
-        label="Number of fights"
+        label="Liczba walk"
         min={0}
         max={50}
         value={state.inputValues.fights}
@@ -224,7 +227,8 @@ const ProfileScreen = (props) => {
 
       <LabeledSlider
         id="weight"
-        label="Weight (kg)"
+        label="Waga"
+        subLabel="kg"
         min={30}
         max={120}
         value={state.inputValues.weight}
@@ -235,7 +239,7 @@ const ProfileScreen = (props) => {
       ) : (
         dataChanged && (
           <SubmitButton
-            title="Update"
+            title="Aktualizuj"
             onPress={saveHandler}
             disabled={!state.formIsValid}
           />

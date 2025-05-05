@@ -196,8 +196,8 @@ const SignUp = () => {
 
       <LabeledSlider
         id="experience"
-        label="Boxing Experience"
-        subLabel="years"
+        label="Staż Bokerski"
+        subLabel="Lat"
         min={0}
         max={30}
         value={state.inputValues.experience}
@@ -206,7 +206,7 @@ const SignUp = () => {
 
       <LabeledSlider
         id="fights"
-        label="Number of fights"
+        label="Liczba walk"
         min={0}
         max={50}
         value={state.inputValues.fights}
@@ -215,7 +215,7 @@ const SignUp = () => {
 
       <LabeledSlider
         id="weight"
-        label="Weight"
+        label="Waga"
         subLabel="kg"
         min={30}
         max={120}
