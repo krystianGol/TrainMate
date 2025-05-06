@@ -257,6 +257,7 @@ const ChatScreen = (props) => {
                     <Bubble
                       type="myMessage"
                       text={message.text}
+                      date={message.sentAt}
                       setReplay={() => setReplayingTo(message)}
                       replayingTo={
                         message.replayTo &&
@@ -377,6 +378,7 @@ const ChatScreen = (props) => {
             onChangeText={(text) => setMessageText(text)}
             value={messageText}
             onSubmitEditing={sendMessage}
+            keyboardAppearance="dark"
           />
           {messageText === "" && (
             <TouchableOpacity style={styles.mediaButton} onPress={takePhoto}>
@@ -415,6 +417,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     paddingHorizontal: 12,
     color: "white",
+    fontFamily: "regular",
+    letterSpacing: 0.3,
   },
   mediaButton: {
     alignSelf: "center",

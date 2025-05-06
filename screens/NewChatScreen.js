@@ -143,6 +143,7 @@ const NewChatScreen = (props) => {
           style={styles.textBox}
           placeholder="Wyszukaj użytkownika"
           onChangeText={(text) => setSearchTerm(text)}
+          keyboardAppearance="dark"
         />
       </View>
       {!isLoading && !noResultFound && users && (

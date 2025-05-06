@@ -20,21 +20,32 @@ import Entypo from "@expo/vector-icons/Entypo";
 import colors from "../constans/colors";
 import { useSelector } from "react-redux";
 
+function formatAmPm(dateString) {
+  const date = new Date(dateString);
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  return hours + ":" + minutes + " " + ampm;
+}
+
 const MenuItem = (props) => {
   const Icon = props.iconPack ?? Feather;
 
   return (
     <MenuOption onSelect={props.onSelect}>
       <View style={styles.menuItemContainer}>
-        <Text style={styles.menuText} >{props.text}</Text>
-        <Icon name={props.icon} size={18} color={colors.primaryColor}/>
+        <Text style={styles.menuText}>{props.text}</Text>
+        <Icon name={props.icon} size={18} color={colors.primaryColor} />
       </View>
     </MenuOption>
   );
 };
 
 const Bubble = (props) => {
-  const { text, type } = props;
+  const { text, type, date } = props;
   const storedUsers = useSelector((state) => state.users.storedUsers);
 
   const bubbleStyle = { ...styles.container };
@@ -43,6 +54,7 @@ const Bubble = (props) => {
 
   const menuRef = useRef(null);
   const id = useRef(uuid.v4());
+  const dateString = date && formatAmPm(date);
 
   let Container = View;
 
@@ -121,6 +133,12 @@ const Bubble = (props) => {
           {props.imageUrl && (
             <Image source={{ uri: props.imageUrl }} style={styles.image} />
           )}
+
+          {dateString && (
+            <View style={styles.timeContainer}>
+              <Text style={styles.time}>{dateString}</Text>
+            </View>
+          )}
           <Menu name={id.current} ref={menuRef}>
             <MenuTrigger />
             <MenuOptions
@@ -168,6 +186,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "regular",
     letterSpacing: 0.3,
+    fontSize: 16,
   },
   menuItemContainer: {
     flexDirection: "row",
@@ -203,6 +222,16 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 5,
+  },
+  timeContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  time: {
+    fontFamily: "regular",
+    letterSpacing: 0.3,
+    color: "grey",
+    fontSize: 11,
   },
 });
 

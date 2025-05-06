@@ -177,6 +177,7 @@ const CalendarScreen = (props) => {
                   style={styles.input}
                   value={eventTitle}
                   onChangeText={setEventTitle}
+                  keyboardAppearance="dark"
                 />
 
                 <TouchableOpacity

@@ -26,6 +26,7 @@ const Input = (props) => {
           keyboardType={props.keyboardType || "default"}
           onChangeText={onChangeText}
           value={props.value}
+          keyboardAppearance="dark"
         />
       </View>
       {props.errorText && (
