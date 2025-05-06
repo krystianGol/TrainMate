@@ -26,6 +26,7 @@ import { setEvents, removeEvent } from "../store/calendarSlice";
 import EventItem from "../components/EventItem";
 import PageContainer from "../components/PageContainer";
 import colors from "../constans/colors";
+import { StatusBar } from 'expo-status-bar';
 
 const CalendarScreen = (props) => {
   const [selectedDay, setSelectedDay] = useState("");
@@ -166,6 +167,7 @@ const CalendarScreen = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
+      <StatusBar style="light" />
         <Calendar
           style={{
             backgroundColor: colors.backgroundColor,
