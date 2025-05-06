@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useMemo } from "react";
-import { Calendar } from "react-native-calendars";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import Modal from "react-native-modal";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Platform } from "react-native";
@@ -128,6 +128,40 @@ const CalendarScreen = (props) => {
       ),
     });
   }, []);
+
+  LocaleConfig.locales['pl'] = {
+    monthNames: [
+      'Styczeń',
+      'Luty',
+      'Marzec',
+      'Kwiecień',
+      'Maj',
+      'Czerwiec',
+      'Lipiec',
+      'Sierpień',
+      'Wrzesień',
+      'Październik',
+      'Listopad',
+      'Grudzień'
+    ],
+    monthNamesShort: [
+      'Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze',
+      'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'
+    ],
+    dayNames: [
+      'Niedziela',
+      'Poniedziałek',
+      'Wtorek',
+      'Środa',
+      'Czwartek',
+      'Piątek',
+      'Sobota'
+    ],
+    dayNamesShort: ['Ndz', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob'],
+    today: 'Dzisiaj'
+  };
+  
+  LocaleConfig.defaultLocale = 'pl';
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
