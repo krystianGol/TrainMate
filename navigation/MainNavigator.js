@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, View, Button } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -139,7 +139,8 @@ const MainNavigator = (props) => {
   const userData = useSelector((state) => state.auth.userData);
   const storedUsers = useSelector((state) => state.users.storedUsers);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     const refs = [];
@@ -216,6 +217,7 @@ const MainNavigator = (props) => {
 
   return <StackNavigator />;
 };
+
 const styles = StyleSheet.create({
   indicatorContainer: {
     flex: 1,
@@ -223,5 +225,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
 
 export default MainNavigator;

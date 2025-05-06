@@ -33,6 +33,9 @@ const CalendarScreen = (props) => {
   const [eventTitle, setEventTitle] = useState("");
   const [eventTime, setEventTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  console.log(selectedDay)
 
   const dispatch = useDispatch();
   const events = useSelector(
@@ -46,7 +49,7 @@ const CalendarScreen = (props) => {
 
     Object.keys(storedEvents).forEach((date) => {
       if (storedEvents[date]?.length > 0) {
-        marks[date] = {
+          marks[date] = {
           marked: true,
           dotColor: colors.primaryColor,
         };
@@ -78,6 +81,10 @@ const CalendarScreen = (props) => {
         minute: "2-digit",
       }),
     };
+
+    if (eventData.title === "" || !selectedDay) {
+      return;
+    }
 
     dispatch(addEvent(eventData));
 
@@ -209,6 +216,7 @@ const CalendarScreen = (props) => {
                   textColor="white"
                   buttonTextColorIOS={colors.primaryColor}
                   isDarkModeEnabled={true}
+                  minimumDate={currentTime}
                 />
 
                 <TouchableOpacity
@@ -304,7 +312,7 @@ const styles = StyleSheet.create({
   },
   timeButtonText: {
     fontSize: 18,
-    color: "#aba5a5",
+    color: "white",
     fontWeight: "600",
     letterSpacing: 0.3,
   },
