@@ -142,6 +142,7 @@ const NewChatScreen = (props) => {
         <TextInput
           style={styles.textBox}
           placeholder="Wyszukaj użytkownika"
+          placeholderTextColor="grey"
           onChangeText={(text) => setSearchTerm(text)}
           keyboardAppearance="dark"
         />

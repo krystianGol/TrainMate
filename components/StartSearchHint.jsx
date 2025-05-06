@@ -6,9 +6,9 @@ const StartSearchHint = () => {
   return (
     <View style={styles.container}>
       <Feather name="search" size={70} color="#bbb" />
-      <Text style={styles.title}>Start searching</Text>
+      <Text style={styles.title}>Zacznij wyszukiwać</Text>
       <Text style={styles.subtitle}>
-        Enter name to get started.
+        Wpisz imie lub miato użytkownika aby rozpocząć
       </Text>
     </View>
   );

@@ -6,8 +6,8 @@ const NoUsersFound = () => {
   return (
     <View style={styles.container}>
       <Ionicons name="person-circle-outline" size={80} color="#ccc" />
-      <Text style={styles.title}>No results found</Text>
-      <Text style={styles.subtitle}>No users found.</Text>
+      <Text style={styles.title}>Brak wyników</Text>
+      <Text style={styles.subtitle}>Nie zanleziono użytkowników</Text>
     </View>
   );
 };
