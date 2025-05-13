@@ -15,6 +15,7 @@ export const createNewChat = async (loggedInUserId, chatData) => {
     const newChat = await push(child(db, "chats"), newChatData);
 
     const chatUsers = chatData.users;
+
     for (let i=0; i<chatUsers.length; i++) {
         const userId = chatUsers[i]
         await push(child(db, `userChats/${userId}`), newChat.key);
@@ -57,3 +58,4 @@ export const sendMessage = async (chatId, senderId, messageText, imageUrl, repla
         latestMessageText: messageText,
     });
 }
+

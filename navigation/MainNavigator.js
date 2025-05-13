@@ -38,7 +38,7 @@ function TabNavigator() {
         component={CalendarScreen}
         options={{
           title: "Wydarzenia",
-          tabBarLabel: "Calendar",
+          tabBarLabel: "Kalendarz",
           tabBarIcon: ({ color }) => (
             <FontAwesome name="calendar-check-o" size={24} color={color} />
           ),
@@ -59,7 +59,7 @@ function TabNavigator() {
         component={ChatListScreen}
         options={{
           title: "Czaty",
-          tabBarLabel: "Chats",
+          tabBarLabel: "Wiadomości",
           headerStyle: {
             backgroundColor: colors.backgroundColor,
           },
@@ -80,7 +80,7 @@ function TabNavigator() {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          tabBarLabel: "Profile",
+          tabBarLabel: "Profil",
           tabBarIcon: ({ color }) => (
             <FontAwesome name="user-o" size={24} color={color} />
           ),

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useEffect, useState, useCallback } from "react";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -8,8 +8,11 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import { MenuProvider } from "react-native-popup-menu";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AppNavigator from "./navigation/AppNavigator";
+
+// AsyncStorage.clear();
 
 SplashScreen.preventAutoHideAsync();
 

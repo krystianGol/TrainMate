@@ -36,8 +36,6 @@ const CalendarScreen = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  console.log(selectedDay)
-
   const dispatch = useDispatch();
   const events = useSelector(
     (state) => state.calendar.storedEvents[selectedDay] || []

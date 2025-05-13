@@ -17,6 +17,8 @@ const ChatListScreen = (props) => {
   const userData = useSelector((state) => state.auth.userData);
   const storedUsers = useSelector((state) => state.users.storedUsers);
 
+  console.log(userData)
+
   const userChats = useSelector((state) => {
     const chatsData = state.chats.chatsData;
     return Object.values(chatsData).sort((a, b) => {
